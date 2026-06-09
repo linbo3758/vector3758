@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hooke's Law & Integration Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .demo-container { max-width: 600px; margin: 300px auto; font-family: sans-serif; text-align: center; }
+        .slider-box { margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        #rectSlider { width: 200px; }
+    </style>
+</head>
+<body>
+
+<div class="demo-container">
+    <h3>Visualising the Accumulation of Work Done</h3>
+    <p>Drag the slider to see how discrete steps (Lego bars) turn into a continuous calculus triangle!</p>
+    
+    <div class="slider-box">
+        <label for="rectSlider">Number of Bars:</label>
+        <input type="range" id="rectSlider" min="4" max="100" value="5" step="1">
+        <span id="barCount">5</span>
+    </div>
+
+    <canvas id="accumulationChart"></canvas>
+</div>
+
+<script>
+// 模拟弹簧参数 F = kx (这里假设 k = 2, 最大拉伸距离 x = 10)
+const k = 2;
+const maxX = 10;
+
+const ctx = document.getElementById('accumulationChart').getContext('2d');
+let chart;
+
+function generateData(numBars) {
+    let labels = [];
+    let barData = [];
+    let lineData = [];
+    
+    let step = maxX / numBars;
+    
+    for (let i = 0; i <= numBars; i++) {
+        let x = i * step;
+        labels.push(x.toFixed(1));
+        lineData.push(k * x); // 完美的连续直线 F = kx
+        
+        if (i < numBars) {
+            barData.push(k * x); // 每一个小矩形的高度（左黎曼和）
+        }
+    }
+    return { labels, barData, lineData };
+}
+
+function initChart() {
+    let data = generateData(5);
+    
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Work Done (Lego Bars)',
+                data: data.barData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                barPercentage: 1.0,
+                categoryPercentage: 1.0,
+                order: 2
+            }, {
+                label: 'Ideal Force (F = kx)',
+                data: data.lineData,
+                type: 'line',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                order: 1
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'Displacement (x)' } },
+                y: { title: { display: true, text: 'Force (F)' }, beginAtZero: true }
+            }
+        }
+    });
+}
+
+// 监听滑块变化，实时更新图表
+document.getElementById('rectSlider').addEventListener('input', function(e) {
+    let numBars = parseInt(e.target.value);
+    document.getElementById('barCount').innerText = numBars;
+    
+    let newData = generateData(numBars);
+    chart.data.labels = newData.labels;
+    chart.data.datasets[0].data = newData.barData;
+    chart.data.datasets[1].data = newData.lineData;
+    chart.update();
+});
+
+initChart();
+</script>
+
+</body>
+</html>
