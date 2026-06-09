@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Vector 3758 — 精确对齐网格</title>
+<title>Vector 3758</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -313,8 +313,8 @@ body {
             <div class="card article-card" id="articleCardWrapper">
                 <div class="article-content-area">
                     <div class="label">LATEST ARTICLE</div>
-                    <div class="article-title" id="articleTitle">Deep Dive into Trend 67</div>
-                    <div class="article-desc" id="articleDesc">An investigation into why nobody remembers trend 66.</div>
+                    <div class="article-title" id="articleTitle">How Springs Secretly Teach Calculus?</div>
+                    <div class="article-desc" id="articleDesc">The surprising story behind the ½ in $E = \frac{1}{2}kx^2$</div>
                     <div class="read-link" id="readArticleLink">Read article →</div>
                 </div>
                 <div class="nav-dots" id="dotsContainer"></div>
@@ -363,7 +363,7 @@ body {
     // 文章轮播数据 (5篇)
     // ----------------------------------------------
     const articlesList = [
-        { title: "Deep Dive into Trend 67", desc: "An investigation into why nobody remembers trend 66." },
+        { title: "How Springs Secretly Teach Calculus?", desc: "The surprising story behind the ½ in $E = \frac{1}{2}kx^2$" },
         { title: "Fourier Analysis of Bad Decisions", desc: "Breaking poor life choices into sinusoidal components." },
         { title: "The Probability of Finding Another Sock", desc: "A statistical study of laundry anomalies." },
         { title: "Why Bananas Are Statistically Suspicious", desc: "Evidence suggests bananas know more than they reveal." },
@@ -379,7 +379,6 @@ body {
     const articleCardWrapper = document.getElementById("articleCardWrapper");
     const readLink = document.getElementById("readArticleLink");
 
-    // 构建圆点导航 (小点, 无数字)
     function buildDots() {
         dotsContainer.innerHTML = '';
         articlesList.forEach((_, idx) => {
@@ -447,24 +446,41 @@ body {
     }
 
   
-    function navigateToArticle() {
-        window.location.href = "article.html";
-    }
+  // 文章卡片跳转逻辑
+function navigateToArticleGeneral() {
+    window.location.href = "articles.html";
+}
 
-    if (articleCardWrapper) {
-        articleCardWrapper.addEventListener('click', (e) => {
-            // 不论点哪里，都跳转到 article.html（完全符合需求: 点击read article 或者卡片任何位置）
-            e.stopPropagation(); 
-            navigateToArticle();
-        });
-    }
-    // 额外确保 readLink 不会产生冒泡重复, 但是已经统一跳转
-    if (readLink) {
-        readLink.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navigateToArticle();
-        });
-    }
+function navigateToSpecificArticle() {
+    // 根据当前轮播索引跳转到对应的具体文章页面
+    const specificPages = [
+        "how-springs-secretly-teach-calculus.html",
+        "fourier-analysis.html",
+        "sock-probability.html",
+        "bananas-statistical.html",
+        "cat-thermodynamics.html"
+    ];
+    window.location.href = specificPages[currentIdx];
+}
+
+if (articleCardWrapper) {
+    articleCardWrapper.addEventListener('click', (e) => {
+        // 如果点击的目标是 readLink 或其内部元素，不在这里处理，让 readLink 自己的处理器接管
+        if (readLink && readLink.contains(e.target)) {
+            return;
+        }
+        // 点击卡片其他任何位置，跳转到总的 articles.html
+        e.stopPropagation();
+        navigateToArticleGeneral();
+    });
+}
+
+if (readLink) {
+    readLink.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navigateToSpecificArticle();
+    });
+}
 
     // 右侧 Experiments 卡片整体跳转 experiments.html
     const experimentsCard = document.getElementById("experimentsCard");
