@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Can Healing Be Ever Completed?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+}
+
+body {
+    /* 核心视觉：Times New Roman 字体与静止不动的格子纸背景 */
+    font-family: "Times New Roman", Times, serif;
+    background-color: var(--bg);
+    background-image:  
+        linear-gradient(rgba(5, 61, 130, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed; /* 使得下滑时背景保持不动 */
+    color: var(--text);
+    line-height: 1.65;
+    padding: 48px 24px;
+}
+
+.container {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+/* ---------- 导航头部 ---------- */
+.nav-header {
+    margin-bottom: 40px;
+}
+.back-link {
+    font-family: "Inter", sans-serif;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    display: inline-block;
+    border-bottom: 1.5px solid transparent;
+    padding-bottom: 2px;
+}
+.back-link:hover {
+    border-color: var(--text);
+    opacity: 0.7;
+}
+
+/* ---------- 文章头部区 ---------- */
+.article-header {
+    margin-bottom: 32px;
+}
+.meta-container {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.meta-tag {
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid rgba(79, 207, 231, 0.4);
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+.meta-item {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-weight: 400;
+}
+.article-title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+.article-subtitle {
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--accent);
+    margin-bottom: 28px;
+}
+.header-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(5, 61, 130, 0.12);
+    margin-top: 24px;
+}
+
+/* ---------- 文章正文排版 ---------- */
+.article-content p {
+    font-size: 1.18rem;
+    margin-bottom: 24px;
+    text-align: justify;
+}
+.article-content strong {
+    font-weight: 600;
+}
+
+
+/* 卡片内部的精致微观微弱格子 */
+.interactive-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:  
+        linear-gradient(rgba(5, 61, 130, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.02) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+}
+.widget-title {
+    font-family: "Inter", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 2;
+}
+.widget-desc {
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+}
+.slider-box {
+    font-family: "Inter", sans-serif;
+    margin: 20px 0 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    position: relative;
+    z-index: 2;
+    font-size: 0.95rem;
+}
+/* 高定风格滑块控制条 */
+#rectSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 240px;
+    height: 5px;
+    background: rgba(5, 61, 130, 0.1);
+    border-radius: 3px;
+    outline: none;
+}
+#rectSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(79, 207, 231, 0.25);
+    transition: transform 0.1s ease;
+}
+#rectSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+}
+#barCount {
+    font-weight: 600;
+    min-width: 28px;
+    text-align: left;
+}
+.chart-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+/* 移动端适配响应 */
+@media (max-width: 768px) {
+    body {
+        padding: 32px 16px;
+    }
+    .article-title {
+        font-size: 2.2rem;
+    }
+    .article-subtitle {
+        font-size: 1.15rem;
+    }
+    .interactive-card {
+        padding: 20px 16px;
+    }
+    #rectSlider {
+        width: 150px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-header">
+        <a href="../index.html" class="back-link">← Vector 3758</a>
+    </div>
+
+    <div class="article-header">
+        <div class="meta-container">
+            <span class="meta-tag">Research</span>
+            <span class="meta-item">🕒 8 Min Read</span>
+            <span class="meta-item">📅 11/05/2026</span>
+        </div>
+        <h1 class="article-title">Can Healing Be Ever Completed?</h1>
+        <h2 class="article-subtitle">Or is it always an ongoing negotiation with pain, memory and identity?</h2>
+        <div class="header-divider"></div>
+    </div>
+
+    <div class="article-content">
+        <p>Healing is often imagined as a return: the restoration to a prior state of wholeness. The linguistic roots of the word “healing” itself encourage this assumption: derived from the Old English hælan (“to make whole”). From this perspective, healing has been implicitly suggested as a process of purification where the vulnerabilities have treated as an excision to be purged.
+Yet this definition collapses once examined closely. Recovery does not erase vulnerability but incorporates it: the healed state may function, integrate, or even strengthen, while remaining irreversibly altered. Healing is not so much a restoration as it is negotiation: a continual dialogue of adaptation between irreversible changes done by healing and the human desire for wholeness.
+
+This biological irreversibility complicates the clinical ideal of healing as restoration. In the realm of acute care, the clinical expectations are often binary: the wound is closed, and the function is restored. 
+This focus on “recovery” often omits the fundamental distinction between regeneration and repair. Adult mammals have largely traded the capacity for true regeneration (the proteomic replacement of lost tissue) for fibrosis (the rapid deposition of scar tissue). This evolutionary compromise ensures immediate survival at the expense of structural integrity(Gurtner et al.). Scar tissue, characterised by its dense, unidirectionally aligned collagen fibres, possesses neither the elasticity nor the intricate physiological complexity of the original organ. Therefore, what medical metrics label as a “cured” state is, in biological terms, a permanent substitution. The organism does not revert to its prior wholeness; it merely achieves a functional equilibrium that carries the irreversible mark of its trauma.
+The psyche conducts its own irreversible negotiation through the remodelling of neural architecture. Central to this is the mechanism of synaptic pruning: the brain’s way of refining neural connections by eliminating weaker synapses to strengthen dominant pathways. Research on neuroplasticity suggests that traumatic stress reshapes neural pathways associated with memory, vigilance, and emotional regulation. In adapting to survival, the brain does not necessarily return to its previous state, as a process that leaves the neural system permanently altered.
+This biological shift also complicates what philosophers describe as the diachronic self: the idea, most notably associated with John Locke, that identity persists through a continuous chain of memory and consciousness across time. Trauma interrupts this continuity by irreversibly altering the way past experience is carried into the present. Once neural pathways have been reshaped through adaptation and survival, the subject cannot simply return to an earlier state of being. Even after stability is regained, the individual who emerges from trauma experiences both memory and identity differently from before. If healing is understood as a restoration of the prior self, then complete healing becomes impossible, because the original form of that self no longer exists.
+
+If “healing to wholeness” proves conceptually unstable across multiple domains, why does this pseudo-proposition continue to structure our societal logic?
+The societal obsession with a definitive “healing baseline” is less a reflection of biological reality than a requirement of governance and economic utility.
+Through the concept of the “medical gaze” (Foucault), Michel Foucault argues that modern clinical medicine shifted the focus from the patient's subjective experience to an observable body. By establishing a rigid threshold of a “healed” state, medical institutions create a binary system: you are either “whole” (thus a functional member of society) or “broken” (thus a subject of monitoring and intervention). This standardisation is less about the individual’s well-being and more about the institutional need for quantifiable metrics; a “ negotiation” with pain cannot be billed, insured, or managed by a state bureaucracy, but a “completed recovery” can.
+“Sick Role”, elucidated by Talcott Parsons(Parsons), where illness is viewed by the society as a form of “sanctioned deviance” While an individual is temporarily excused from their social obligations, this exemption is granted on the strict condition that they must recognise their state as undesirable and commit to an active pursuit of recovery. In the late capitalist society, this “recovery” is narrowly defined as the restoration of individual’s productive capacity. Therefore, the societal insistence on “wholeness” is a tool of economic efficiency, designed to erase the complexity of the scarred self in favour of the efficiency of the “repairable machine”.
+Nevertheless, this is not to suggest that medical baselines of healing are entirely artificial or unnecessary. Clinical practice necessarily depends upon certain thresholds in order to assess deterioration and allocate resources. Yet the contemporary understandings of recovery has increasingly incorporated person-centred models of care, which place greater emphasis on lived experience and subjective well-being
+Beyond the external pressure imposed by the society, the internal obsession with “wholeness” rooted in a fundamental crisis of identity. Best captured by the paradox of Ship of Theseus: Plutarch wondered if a ship remains the same after every plank has been replaced. We wonder, when we experience trauma, our “planks” (neural pathways, cellular structure and memory) are irreversibly altered or not. We cling to the standard of “complete healing” because we fear that if we cannot return to our form, the continuity of the self is lost. We do not just want to be functional; we want to be the same. From this perspective, the obsession with wholeness is a desperate attempt to anchor the diachronic self; a refusal to accept that the self, who emerging from suffering, no longer coincide with the one existed before it. We treat healing as a restoration of the “original ship” because the alternative, acknowledging that we are a new, patched-up iteration, feels like a small psychic death.
+Within theological and philosophical traditions, the association between healing and perfection (flawless restoration) has deep historical roots. The Genesis narrative of the Fall of Man, human existence shifts from primordial unity to fragmentation through disobedience, thereby establishing rupture itself as a condition of fallen life. A comparable logic emerges in Platonism, in which the ideal form exists as pure and complete, while imperfection is treated as deviation from truth. Across both traditions, healing implicitly imagined as a movement toward an original or ideal wholeness, where vulnerability signifies error to be fixed toward an imagined completeness rather than transformation
+These metaphysical ideas have been inherited to modern culture. As Byung-Chul Han criticises “the smooth”, contemporary society increasingly eliminates forms of resistance, negativity, and visible rupture, privileging surfaces that appear frictionless and intact(Han). Under such conditions, vulnerabilities become intolerable because they interrupt the fantasy of uninterrupted wholeness.
+The “unsmoothness” observed in biological systems appears commonly in lived experience. When a bone fractures, your body does not only “glue” the pieces back together; it regenerates in a new sequence that culminating in the formation of a callus. The initial fibrocartilaginous callus is replaced by a bony callus that is often thicker and more mineralised than the original structure. This phenomenon, often described as overcompensation, doesn’t return to the initial form, but rather an adaptation that reduces the probability of recurrence. 
+In some cases, vulnerability cannot even be resolved through removal or repair. When the biological system encounters a foreign body – such as such as a splinter or certain pathogens –it adopts a strategy of sequestration. This results in the formation of a granuloma, a structured aggregation of immune cells that wall off the intrusion to protect the rest of the organism. As the foreign body remains permanently in the body, it represents a profound shift in the definition of wholeness. Wholeness, in this sense, is no longer maintained by the absence of damage, but by the capacity to incorporate irreversible vulnerability within the architecture of the organism.
+Christ’s resurrection offers a theological interruption to the logic of restoration as erasure. In the Christian narrative of resurrection, Christ’s resurrected body precludes a state of seamless repair; instead, he retains his wounds. The wounds of crucifixion endure not as defects to be corrected but as persist as visible continuities within the resurrected body. This image dismantles the assumption that healing necessarily entails the removal of damage, suggesting instead that what survives suffering is less a pre-traumatic wholeness restored than a transformed continuity that still bears the trace of rupture. The “healed” body is therefore not identical to its prior state, nor purified into absence of injury, but reconfigured in a way that incorporates what cannot be undone.
+
+To move beyond the binary of “whole versus broken”, we must shift our lens from a substance-based mindset to a process-oriented ontology. This shift requires us to redefine identity as an ongoing synthesis that sustains itself through the changes it undergoes.
+Paul Ricoeur’s theory of narrative identity relocates continuity away from substance and into interpretation. For Ricoeur, the self endures through an ongoing labour of emplotment(Ricoeur Oneself as Another): the act by which characters, experiences, and rupture are configured into a narrative capable of being inhabited. This narrative structure has two levels. One is sameness over time in the weak sense (continuity that allows us to recognise a person as the same individual). The other is selfhood, which refers to how a person actively interprets and reconfigures their life events. Identity, for Ricoeur, emerges from the tension between these two: stability is less of an essence that given in advance, more of produced through interpretation(Ricoeur Time and Narrative).
+Whereas Buddhist and Hindu account of impermanence (Anicca; Anitya) become thematically relevant(Rahula). Impermanence, literally means non-constant, demolishes what is taken to be stable, such as a self, an object. They are analysed as a temporary configuration of conditions that are perpetually arising and dissolving. Persistence is always dependent, produced through shifting relations. It is a continuous stabilisation of processes that are already in motion. Crucially, this destabilises the intuition that there is something “behind” change that undergoes it. Impermanence removes that layer entirely: there is no fixed substrate undergoing transformation, only transformation with coherence – which is integration. 
+
+To ask whether the traditional idea of healing as “restoration to wholeness” can ever be completed is ultimately to ask whether a human being can return unchanged by vulnerability. It is both a biological impossibility and a philosophical misinterpretation of the self. 
+If we accept that identity is a narrative emplotment, then healing, is neither return nor completion. It is something closer to what the granuloma enacts: a reorganization of the self around what cannot be removed, an ongoing accommodation between memory, pain and the self that persists alongside them.
+</p>
+
+
+</body>
+</html>
