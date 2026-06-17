@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Gender Diversity Is Fashionable, but Is It Valuable?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --bg: #FCFBF8;
+      --paper: #FFFFFF;
+      --text: #053D82;
+      --accent: #4FCFE7;
+      --border-card: #ebebeb;
+      --hover-bg: #F8FAFE;
+    }
+    body {
+      font-family: "Times New Roman", Times, serif;
+      background-color: var(--bg);
+      background-image:  
+        linear-gradient(rgba(5, 61, 130, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-attachment: fixed;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 48px 24px;
+    }
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    /* 导航 */
+    .nav-header {
+      margin-bottom: 40px;
+    }
+    .back-link {
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: opacity 0.2s;
+      display: inline-block;
+      border-bottom: 1.5px solid transparent;
+      padding-bottom: 2px;
+    }
+    .back-link:hover {
+      border-color: var(--text);
+      opacity: 0.7;
+    }
+    /* 文章头部 */
+    .article-header {
+      margin-bottom: 32px;
+    }
+    .meta-container {
+      font-family: "Inter", sans-serif;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .meta-tag {
+      color: var(--accent);
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      border: 1px solid rgba(79, 207, 231, 0.4);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+    .meta-item {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      font-weight: 400;
+    }
+    .article-title {
+      font-size: 2.8rem;
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .article-subtitle {
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .header-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(5, 61, 130, 0.12);
+      margin-top: 24px;
+    }
+    /* 正文段落 – 清晰分段，保留小标题样式 */
+    .article-content p {
+      font-size: 1.18rem;
+      margin-bottom: 28px;
+      text-align: justify;
+      text-justify: inter-ideograph;
+      word-break: break-word;
+    }
+    .article-content strong {
+      font-weight: 600;
+    }
+    /* 小标题样式 – 完全符合学术文章层级 */
+    .section-heading {
+      font-family: "Inter", sans-serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 2.2rem;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.3px;
+      border-bottom: 2px solid rgba(5, 61, 130, 0.08);
+      padding-bottom: 6px;
+    }
+    .sub-heading {
+      font-family: "Inter", sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 1.8rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.2px;
+    }
+    .sub-sub-heading {
+      font-family: "Inter", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 1.4rem;
+      margin-bottom: 0.4rem;
+      opacity: 0.9;
+    }
+    /* 引用/脚注风格 – 保持原样 */
+    .footnote-sup {
+      font-size: 0.75rem;
+      vertical-align: super;
+      line-height: 1;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      body {
+        padding: 32px 16px;
+      }
+      .article-title {
+        font-size: 2.2rem;
+      }
+      .article-subtitle {
+        font-size: 1.15rem;
+      }
+      .section-heading {
+        font-size: 1.4rem;
+      }
+      .sub-heading {
+        font-size: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- 导航 (与原风格一致) -->
+  <div class="nav-header">
+    <a href="#" class="back-link">← Vector 3758</a>
+  </div>
+
+  <!-- 文章头部 -->
+  <div class="article-header">
+    <div class="meta-container">
+      <span class="meta-tag">Research</span>
+      <span class="meta-item">🕒 10 分钟阅读</span>
+      <span class="meta-item">📅 2025.06.30</span>
+    </div>
+    <h1 class="article-title">Gender Diversity is fashionable, but is it valuable?</h1>
+    <h2 class="article-subtitle">在时尚与价值之间：性别多样性的全球图景</h2>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- 正文内容 – 完全复刻docx结构，包含小标题、段落、脚注标记 -->
+  <div class="article-content">
+    <!-- 引言段 -->
+    <p>In the last couple of decades in many western countries, there has been growing awareness of gender diversity <span class="footnote-sup">1</span> —(refers to variations in gender identity and expression or role rather than traditional expectations of female or male. Examples of gender diverse people include transgender people, genderqueers and non-binary people<span class="footnote-sup">2</span>. This is different from acknowledging that gender is a 2-category, exclusive, binary (either born a boy or a girl), and what we are more interested in is that gender is assumed to line up with our assigned sex. However, there is growing body of evidence that suggests gender might be more than just what we make it to be. The 2010s has seen the use of the word LGBTQ, and other variant. LGBTQ+ is an initial that stands for lesbian, gay, bisexual, and transgender, plus means other LGBTQ identities and expressions other than those listed above.</p>
+
+    <!-- 一级标题：Current Global Landscape of Gender Diversity -->
+    <h2 class="section-heading">Current Global Landscape of Gender Diversity</h2>
+    <p>In 2025 9% of adults worldwide identify as LGBTQ from new global survey. The rate varies from 15% in Brazil to 3% in South Korea (NBCNEWS). Gallup also surveyed adults in the United States where 9.3% identify as LGBT, The UK has reported 3.3% in 2023 (ONS) but this may be rising as attitudes towards diversity in sexual identity are changing.</p>
+    <p>Legal recognition of same-sex marriage is one measure of acceptance. As things stand in 2025, 38 countries recognize same-sex marriage legally. In 2001<span class="footnote-sup">3</span> The Netherlands became the first country to legalise same-sex marriage, followed by Belgium in 2003 and Spain in 2005. In 2015 the U.S. Supreme Court ruled that all states must issue marriage licenses to same-sex couples<span class="footnote-sup">4</span>. The Marriage Act 2013 came into force in 2014 in England and Wales. China hasn't legalised same-sex marriage. What is worrying is that same sexual activity is illegal and even punishable by death in over 60 countries.</p>
+    <p>Social attitudes and legal responses continue to diverge. This April the U.K. Supreme Court defined a woman as a person born biologically female. It is the culmination of a decades-long legal battle in Scotland, England and Wales. Gender identity is deeply political in the U.S. Meanwhile, in China, BiliBili among other social medias is using TA in place of He or She, reflecting a gradual shift in the world's most populous country. Such differences show an uneven and evolving global landscape, molded by law, culture and generational factors.</p>
+
+    <!-- 一级标题：Global Evolution of Gender Diversity -->
+    <h2 class="section-heading">Global Evolution of Gender Diversity</h2>
+    <p>Gender diversity is not a new or contemporary phenomenon; it has ancient roots all over the world. Gender diversity in the United States was built upon the Indigenous "Two-Spirit" traditions<span class="footnote-sup">5</span>. In China Daoist philosophy has long viewed gender as fluid, and eunuchs have been vital for court in imperial China for thousands of years despite their gender ambiguous presentation. Gay or bisexual characters can be found in literary works like <em>Dream of the Red Chamber</em>. Roberta Cowell —first British trans woman 1951 and Christine Jorgensen —public transition 1952 are foundational moments in transgender history. The 1969 Stonewall Riots are marked as the beginning of the modern LGBTQ+ rights movement in the U.S. However, the recent spate of "bathroom bills" reveals a polarized society around issues of gender identity.</p>
+    <p>In academia, Simone de Beauvoir wrote that gender is different from biological sex<span class="footnote-sup">6</span> in 1949, the foundation for the modern gender theory. In 1990, Judith Butler published her theory of gender performativity<span class="footnote-sup">7</span>. From the 2000s, "non-binary" and "genderqueer" start to be used more recently and was popularized even more by the social medias in the 2010s<span class="footnote-sup">8</span>. Today, more and more countries have included gender identity in their laws and policies.</p>
+
+    <!-- 一级标题：The Value of Gender Diversity -->
+    <h2 class="section-heading">The Value of Gender Diversity</h2>
+
+    <!-- 二级标题：3.1 Social Significance -->
+    <h3 class="sub-heading">3.1 Social Significance</h3>
+
+    <!-- 三级标题：3.1.1 Addressing Gender Preference and Cultural Injustice -->
+    <h4 class="sub-sub-heading">3.1.1 Addressing Gender Preference and Cultural Injustice</h4>
+    <p>In some patriarchal economies of pre-industrial societies, the preference for males over females has existed for a long time, and some people today still prefer to have a son, such as Bangladesh, India, China, etc. For example, due to the influence of ancient Confucianism, there are many sex-selective abortions in China today. Since the 1980s, the sex ratio of boys to girls at birth has been seriously skewed (in 2004, it peaked at 121.18, and in some counties, it reached 177) <span class="footnote-sup">9</span>. Behind all these cold statistics, lie millions of baby girls yet to be born and the violation of women's reproductive rights <span class="footnote-sup">10</span>.</p>
+    <p>Celebrating gender diversity — By popularizing the fact that gender is not the same as sex, we can break down patriarchal mindset and celebrate the dignity of every person, irrespective of his or her gender.</p>
+
+    <!-- 三级标题：3.1.2 Mitigating Surplus Male-Driven Violence -->
+    <h4 class="sub-sub-heading">3.1.2 Mitigating Surplus Male-Driven Violence</h4>
+    <p>The effects of gender imbalance go beyond demography. In China, a generation of "bare branches"—men who are unable to find partners as a result of the skewed sex ratio at birth—accounted for the 2010s. Today, over 30 million men of marrying age are unable to find a partner. The surplus, in turn, drives higher rates of gender-based violence, crime, and the trafficking of women and girls into forced marriages and sexual slavery, particularly in rural areas<span class="footnote-sup">11</span>.</p>
+    <p>Vicious cycles of violence are built on the gender inequality and preference. Promoting gender diversity, along with legal reform and inclusive education, will be the path forward to breaking the cycle by eradicate the causes of gender-based injustice.</p>
+
+    <!-- 三级标题：3.1.3 Promoting Inclusion, Well-being, and Democratic Values -->
+    <h4 class="sub-sub-heading">3.1.3 Promoting Inclusion, Well-being, and Democratic Values</h4>
+    <p>Gender diversity leads to social inclusion and good mental health by decreasing stigma, discrimination and enhancing acceptance. There is evidence that more inclusive societies have lower rates of depression and suicide, and fewer hate crimes; positive, inclusive schools and work places lead to greater belonging and mental health<span class="footnote-sup">12</span> <span class="footnote-sup">13</span>. Educational policies that recognize and respect gender differences enable people to be themselves and treat others equally. Countries that recognize gender minorities tend to be more democratic and rights-friendly places.</p>
+
+    <!-- 二级标题：3.2 Medical Significance -->
+    <h3 class="sub-heading">3.2 Medical Significance</h3>
+
+    <!-- 三级标题：3.2.1 Advancing Scientific Understanding of Mechanism of Gender formation -->
+    <h4 class="sub-sub-heading">3.2.1 Advancing Scientific Understanding of Mechanism of Gender formation</h4>
+    <p>Gender diversity- as it was once overlooked or pathologized- is now increasingly regarded as a nature element of human biology. This growing understanding among scientists has inspired a new biomedical and psychological movement dedicated to discovering the biological basis gender orientation.</p>
+    <p>Growing scientific interest has deepened our understanding that sexual orientation is a biologically trait but not a personal choice. The fraternal birth order effect<span class="footnote-sup">14</span> reveals that maternal immune response to Y chromosome may cause sons to be differently sexual differentiated. Epigenetic studies have found that intra-utero environment may cause different gene expression in even twins, which results in their sexual orientation<span class="footnote-sup">15</span>. Meanwhile, neuroanatomical studies have found that there are differences in the structures of homosexual and heterosexual human brains<span class="footnote-sup">16</span>, as well as patterns of brain activity in transgender people related to body perception and gender identification<span class="footnote-sup">17</span>. These studies have proven that sexual minorities are not deviant, but that the sexual orientation of sexual minorities or gender identity of transgender people originates from biological diversity.</p>
+
+    <!-- 三级标题：3.2.2. Progress in Mental Health Theory and Practice -->
+    <h4 class="sub-sub-heading">3.2.2. Progress in Mental Health Theory and Practice</h4>
+    <p>LGBT individuals experience stigma, discrimination, and marginalization. Minority stress theory <span class="footnote-sup">12</span> has guided research on sexual and gender minority health and well-being. Affirmative therapy for LGBT youth <span class="footnote-sup">18</span> resulting in positive outcomes.</p>
+
+    <!-- 三级标题：3.2.3. Public Health Contributions -->
+    <h4 class="sub-sub-heading">3.2.3. Public Health Contributions</h4>
+    <p>Gender diversity has also improved public health practices, such as tailoring HIV prevention, hormone therapy, and reproductive health services. Additionally, it has fostered interdisciplinary collaboration across psychology, medicine, ethics, sociology, politics, and education, to better understand gender and sexuality.</p>
+
+    <!-- 二级标题：3.3 Economic and Technological Value -->
+    <h3 class="sub-heading">3.3 Economic and Technological Value</h3>
+
+    <!-- 三级标题：3.3.1 Inclusive Economies Perform Better -->
+    <h4 class="sub-sub-heading">3.3.1 Inclusive Economies Perform Better</h4>
+    <p>There is increasing evidence that greater social inclusion of LGBT people contributes to economic performance. In 39 emerging countries, for every 1% increase in the LGBT Legal Rights Index, GDP per capita increases by $2,000 and the Human Development Index <span class="footnote-sup">19</span> improves — similar global research based on data from 132 countries found a positive correlation<span class="footnote-sup">20</span>.</p>
+    <p>Within companies, inclusive firms outperform their competitors. The more gender-diversity the executive team, the 25% more likely it is that a company's profitability is above average (McKinsey, 2020)<span class="footnote-sup">21</span>. Data from the stock market and other measures of long-term financial performance also suggest that LGBT-friendly companies are more competitive <span class="footnote-sup">22</span>.</p>
+
+    <!-- 三级标题：3.3.2 Diversity Fuels Innovation -->
+    <h4 class="sub-sub-heading">3.3.2 Diversity Fuels Innovation</h4>
+    <p>Although early studies failed to provide clear evidence that homosexual people are more creative<span class="footnote-sup">23</span>, recent research paints a different picture. For instance, countries with larger LGBT populations tend to have higher Economic Complexity Indices (which measure a country's ability to innovate<span class="footnote-sup">22</span>). Research on psychological well-being also reveals that people expressing non-conventional gender or sexual identities tend to exhibit higher levels of cognitive flexibility— a trait highly correlated with creativity<span class="footnote-sup">24</span>. This could be one reason why innovative type societies are so friendly.</p>
+    <p>In the U.S., cities with large gay populations, like San Francisco, also have active tech scenes and sustained economic growth<span class="footnote-sup">25</span>. LGBT tech leaders like Sam Altman, CEO of OpenAI show how in an inclusive environment, people can be encouraged to participate in innovation.</p>
+
+    <!-- 三级标题：3.3.3 Attracting Talent in a Globalized Economy -->
+    <h4 class="sub-sub-heading">3.3.3 Attracting Talent in a Globalized Economy</h4>
+    <p>In addition to innovation and productivity, gender inclusiveness is also important for attracting and retaining talent. Surveys indicate that young people are concerned about diversity and feeling safe at work. Countries and companies that promote gender diversity are more likely to attract highly skilled workers in this highly competitive global labor market.</p>
+
+    <!-- 一级标题：4. Challenges -->
+    <h2 class="section-heading">4. Challenges</h2>
+    <p>Although the importance of gender diversity is widely acknowledged, the following challenging issues still exist and need to be taken seriously.</p>
+
+    <!-- 二级标题：4.1 Fairness in Sports -->
+    <h3 class="sub-heading">4.1 Fairness in Sports</h3>
+    <p>The participation of transgender women in competitive sports and, more recently, the participation of transgender women in boxing, as in Paris Olympics, have sparked great concern from people about the fairness of sports. People believe that there are still some physical advantages left after hormone treatment if this allows to participate in the sport, this causes a dilemma between being open and fair.</p>
+
+    <!-- 二级标题：4.2 Reproduction and Evolution -->
+    <h3 class="sub-heading">4.2 Reproduction and Evolution</h3>
+    <p>The biggest problem that same-sex couples face is reproduction. Failure in reproduction is seen as a weakness from an evolutionary perspective. Although adoptions, surrogacies, and Assisted reproduction technology are available, they cannot reproduce through gamete fusion, so they can't pass on their gene. Yet, the number of same-sex marriages keeps going up instead of going down. Maybe that's a clue that biologic logic is not always consistent with social reality.</p>
+
+    <!-- 二级标题：4.3 Gendered Spaces and Safety -->
+    <h3 class="sub-heading">4.3 Gendered Spaces and Safety</h3>
+    <p>The emergence of gender-neutral toilet benefits all but is it real safe? There are very few people pretend to be transexual to abuse the gender toilet. It reminds us that it is always hard to combine with the diversity and safety.</p>
+
+    <!-- 二级标题：4.4 Risk of Exploitation -->
+    <h3 class="sub-heading">4.4 Risk of Exploitation</h3>
+    <p>With the increase of social and economic capital of LGBT+ identity, there will be some people or groups to exploit it for their own interests. This phenomenon cover up the truth and fake the fact.</p>
+
+    <!-- 一级标题：5. Solutions -->
+    <h2 class="section-heading">5. Solutions</h2>
+    <p>Gender equality has brought obvious advantages to humanity, but it has also brought a host of related problems. We cannot go back to the times when women and men were clearly defined. Like Yu the Great who diverted floods not by building dams and walls to hold back the water but by digging channels and canals to let the water out, we should not cover up the truth.</p>
+    <p>The following principles may be useful:</p>
+    <p style="margin-left: 1.2rem; text-indent: -0.8rem;">• Questions of sports eligibility, reproductive ethics, and the like should be decided based on medically and biologically objective facts, not personal feelings.</p>
+    <p style="margin-left: 1.2rem; text-indent: -0.8rem;">• Anti-discrimination laws should be accompanied by laws that promote fairness and balance for everyone, not just minorities.</p>
+    <p style="margin-left: 1.2rem; text-indent: -0.8rem;">• Public education should be more than a hollow slogan but should help people to understand clearly what inclusivity and its effects can and cannot achieve.</p>
+    <p style="margin-left: 1.2rem; text-indent: -0.8rem;">• Both supporters and opponents of diversity should be aboveboard, so that no one can pull a fast one and there is less opportunity for misuse.</p>
+    <p style="margin-left: 1.2rem; text-indent: -0.8rem;">• One cannot talk of inclusion that is unconditional acceptance or indulgence, freedom and responsibility should go hand in hand; only by doing so could gender inclusion drive development in our rapidly growing society instead of hinders it.</p>
+
+    <!-- 参考文献 -->
+    <h2 class="section-heading" style="margin-top: 3rem;">References</h2>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">1 Russell, S. T. & Fish, J. N. Mental Health in Lesbian, Gay, Bisexual, and Transgender (LGBT) Youth. <em>Annu Rev Clin Psychol</em> <strong>12</strong>, 465-487, doi:10.1146/annurev-clinpsy-021815-093153 (2016).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">2 Guidelines for psychological practice with transgender and gender nonconforming people. <em>The American psychologist</em> <strong>70</strong>, 832-864, doi:10.1037/a0039906 (2015).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">3 Trandafir, M. The effect of same-sex marriage laws on different-sex marriage: evidence from the Netherlands. <em>Demography</em> <strong>51</strong>, 317-340, doi:10.1007/s13524-013-0248-7 (2014).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">4 Perry, N. S., Lee, J. & Rhoades, G. K. A closer look at the demographics of same-sex marriage in the United States: Implications for research, practice, and policy. <em>Family process</em> <strong>64</strong>, e13065, doi:10.1111/famp.13065 (2025).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">5 Robinson, M. Two-Spirit Identity in a Time of Gender Fluidity. <em>Journal of homosexuality</em> <strong>67</strong>, 1675-1690, doi:10.1080/00918369.2019.1613853 (2020).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">6 Beauvoir, S. d. <em>The Second Sex</em>. (Vintage Books, 1989).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">7 Butler, J. <em>Gender Trouble: Feminism and the Subversion of Identity</em>. (Routledge, 1990).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">8 Richards, C. <em>et al.</em> Non-binary or genderqueer genders. <em>Int Rev Psychiatry</em> <strong>28</strong>, 95-102, doi:10.3109/09540261.2015.1106446 (2016).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">9 Jiang, Q. & Zhang, C. Recent sex ratio at birth in China. <em>BMJ global health</em> <strong>6</strong>, doi:10.1136/bmjgh-2021-005438 (2021).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">10 Chao, F., Gerland, P., Cook, A. R. & Alkema, L. Systematic assessment of the sex ratio at birth for all countries and estimation of national imbalances and regional reference levels. <em>Proceedings of the National Academy of Sciences of the United States of America</em> <strong>116</strong>, 9303-9311, doi:10.1073/pnas.1812593116 (2019).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">11 Xiong, W. Does the Shortage of Marriageable Women Induce the Trafficking of Women for Forced Marriage? Evidence From China. <em>Violence against women</em> <strong>28</strong>, 1441-1463, doi:10.1177/10778012211014565 (2022).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">12 Meyer, I. H. Prejudice, social stress, and mental health in lesbian, gay, and bisexual populations: conceptual issues and research evidence. <em>Psychological bulletin</em> <strong>129</strong>, 674-697, doi:10.1037/0033-2909.129.5.674 (2003).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">13 Thomas, T. R. <em>et al.</em> Polygenic Scores Clarify the Relationship Between Mental Health and Gender Diversity. <em>Biol Psychiatry Glob Open Sci</em> <strong>4</strong>, 100291, doi:10.1016/j.bpsgos.2024.100291 (2024).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">14 Blanchard, R. Fraternal birth order and the maternal immune hypothesis of male homosexuality. <em>Hormones and behavior</em> <strong>40</strong>, 105-114, doi:10.1006/hbeh.2001.1681 (2001).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">15 Rice, W. R., Friberg, U. & Gavrilets, S. Homosexuality as a consequence of epigenetically canalized sexual development. <em>The Quarterly review of biology</em> <strong>87</strong>, 343-368, doi:10.1086/668167 (2012).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">16 LeVay, S. A difference in hypothalamic structure between heterosexual and homosexual men. <em>Science (New York, N.Y.)</em> <strong>253</strong>, 1034-1037, doi:10.1126/science.1887219 (1991).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">17 Burke, S. M., Manzouri, A. H. & Savic, I. Structural connections in the brain in relation to gender identity and sexual orientation. <em>Sci Rep</em> <strong>7</strong>, 17954, doi:10.1038/s41598-017-17352-8 (2017).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">18 Lightfoot, S., Kia, H., Vincent, A., Wright, D. K. & Vandyk, A. Trans-affirming care: An integrative review and concept analysis. <em>International journal of nursing studies</em> <strong>123</strong>, 104047, doi:10.1016/j.ijnurstu.2021.104047 (2021).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">19 Williams, I. Analysis of LGBT Legal Rights Index and Economic Development in Emerging Economies. (2014).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">20 Badgett, M. V. L., Waaldijk, K. & Rodgers, Y. V. D. M. LGBT Inclusion and Economic Outcomes: Evidence from 132 Countries, 1966–2011. (2019).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">21 McKinsey & Company. Diversity Wins: How Inclusion Matters. (2020).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">22 Boston Consulting, G. How Diverse Leadership Teams Boost Innovation. (2018).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">23 Domino, G. Homosexuality and creativity. <em>Journal of homosexuality</em> <strong>2</strong>, 261-267, doi:10.1300/J082v02n03_09 (1977).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">24 Konik, J. & Crawford, M. Exploring Normative Creativity: Testing the Relationship Between Cognitive Flexibility and Sexual Identity. <em>Sex Roles</em> <strong>51</strong>, 249-253, doi:10.1023/B:SERS.0000037885.22789.83 (2004).</p>
+    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; text-indent: -1.2rem; padding-left: 1.2rem;">25 Gates, G. J. & Florida, R. Technology and Tolerance: The Importance of Diversity to High-Technology Growth. <em>Brookings Review</em> <strong>19</strong>, 32-35 (2001).</p>
+  </div>
+</div>
+</body>
+</html>
