@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Articles — Vector 3758</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-light: #ebebeb;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.4;
+}
+
+@media (max-width: 1100px) {
+    body { padding: 36px 32px; }
+}
+
+@media (max-width: 860px) {
+    body { padding: 28px 20px; }
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ---------- HERO 区块 ---------- */
+.hero {
+    margin-bottom: 52px;
+}
+.back-home {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+.back-home:hover { opacity: 1; }
+
+.logo {
+    font-size: 3.8rem;
+    font-weight: 600;
+    letter-spacing: -3px;
+    color: var(--text);
+    line-height: 1.05;
+}
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 22px;
+}
+
+/* ---------- 通用卡片样式 ---------- */
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    position: relative;
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), background 0.25s, border-color 0.25s, opacity 0.3s ease;
+    cursor: pointer;
+}
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(5, 61, 130, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 1;
+}
+.card:hover {
+    transform: translateY(-3px);
+    background: var(--hover-bg);
+    border-color: #d4d4d4;
+}
+.card-content {
+    padding: 32px;
+    position: relative;
+    z-index: 2;
+}
+.label {
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+.card-title {
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+    margin-bottom: 12px;
+}
+.card-desc {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    opacity: 0.8;
+}
+
+/* ---------- 动态网格布局 ---------- */
+.layout-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* 置顶精选位 */
+.featured-zone {
+    width: 100%;
+}
+.featured-showcase-card {
+    display: flex;
+    align-items: stretch;
+    min-height: 340px;
+}
+.showcase-text {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.showcase-text .card-title { font-size: 2.4rem; }
+
+/* 健壮性保障：当置顶位没有图片时，文字区域平滑占满 100% */
+.featured-showcase-card.no-image .showcase-text {
+    flex: 1;
+}
+
+.showcase-img-wrapper {
+    flex: 2;
+    position: relative;
+    background: #f0f3f6;
+    overflow: hidden;
+    border-left: 1px solid var(--border-card);
+}
+.showcase-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+    opacity: 0.9;
+    transition: transform 0.4s ease;
+}
+.featured-showcase-card:hover .showcase-img {
+    transform: scale(1.02);
+}
+
+/* 不对称双栏 */
+.split-zone {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* 左栏普通卡片列表 */
+.text-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.text-article-card .card-title {
+    font-size: 1.6rem;
+}
+
+/* 健壮性保障：左栏卡片带图时的自适应复合布局 */
+.text-article-card.has-image {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.text-article-card.has-image .card-content {
+    flex: 2;
+}
+.text-article-card.has-image .inline-img-wrapper {
+    flex: 1;
+    background: #f0f3f6;
+    border-left: 1px solid var(--border-card);
+    overflow: hidden;
+}
+.text-article-card.has-image .inline-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+}
+
+/* 右栏侧边栏（核心改动：引入 Sticky 磁吸，杜绝一边留白） */
+.sidebar-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: sticky;
+    top: 48px; /* 滚动到顶部时自动吸附固定 */
+}
+
+/* 分类小部件盒 */
+.category-card {
+    cursor: default;
+}
+.category-card:hover {
+    transform: none;
+    background: var(--paper);
+    border-color: var(--border-card);
+}
+.cat-list {
+    list-style: none;
+    margin-top: 16px;
+}
+.cat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(5, 61, 130, 0.15);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.cat-item:hover {
+    color: var(--accent);
+}
+.cat-item.active {
+    font-weight: 600;
+    color: var(--text);
+    border-bottom-style: solid;
+    border-bottom-color: var(--accent);
+}
+.cat-count {
+    opacity: 0.5;
+}
+
+/* ---------- 跨栏 Load More 平衡器 ---------- */
+.load-more-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(5, 61, 130, 0.08); /* 贯穿底部的分割线，拉齐视觉 */
+    width: 100%;
+}
+.load-more-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding-bottom: 4px;
+    border-bottom: 1.5px solid var(--text);
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.2s, transform 0.2s;
+}
+.load-more-btn:hover {
+    opacity: 1;
+    transform: translateY(1px);
+}
+.load-more-btn.hidden {
+    display: none;
+}
+
+/* 响应式适配 */
+@media (max-width: 960px) {
+    .featured-showcase-card {
+        flex-direction: column;
+    }
+    .showcase-img-wrapper {
+        height: 240px;
+        border-left: none;
+        border-top: 1px solid var(--border-card);
+    }
+    .split-zone {
+        grid-template-columns: 1fr;
+    }
+    .sidebar-zone {
+        position: static; /* 移动端取消磁吸固定 */
+    }
+    .text-article-card.has-image {
+        flex-direction: column;
+    }
+    .text-article-card.has-image .inline-img-wrapper {
+        height: 180px;
+        border-left: none;
+        border-bottom: 1px solid var(--border-card);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <a href="index.html" class="back-home">← Home</a>
+        <div class="logo">Articles</div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="layout-stack">
+        <div class="featured-zone" id="featuredContainer"></div>
+        
+        <div class="split-zone">
+            <div class="text-list" id="articleListContainer"></div>
+
+            <div class="sidebar-zone">
+                <div class="card category-card">
+                    <div class="card-content">
+                        <div class="label" style="margin-bottom: 8px;">Index Matrix</div>
+                        <ul class="cat-list" id="filterMatrix">
+                            <li class="cat-item active" data-tag="ALL"><span>All Archives</span><span class="cat-count" id="count-ALL">0</span></li>
+                            <li class="cat-item" data-tag="Extensions"><span>Extensions</span><span class="cat-count" id="count-Extensions">0</span></li>
+                            <li class="cat-item" data-tag="Research"><span>Research</span><span class="cat-count" id="count-Research">0</span></li>
+                            <li class="cat-item" data-tag="Ex Libris"><span>Ex Libris</span><span class="cat-count" id="count-ExLibris">0</span></li>
+                            <li class="cat-item" data-tag="Experiments"><span>Experiments</span><span class="cat-count" id="count-Experiments">0</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn">Load more archives ↓</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// -------------------------------------------------------------------------
+// 文章数据库 (有图无图智能渲染，杜绝任何样式 Bug)
+// -------------------------------------------------------------------------
+const database = [
+    { 
+        title: "How Springs Secretly Teach Calculus?", 
+        desc: "The story behind the ½ in E = ½ kx² and how mechanical components mirror pure planetary calculus equations.", 
+        tag: "Extensions", 
+        url: "articles/how-springs-secretly-teach-calculus.html",
+        img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80",
+        featured: true 
+    },
+    { 
+        title: "Can Healing Be Ever Completed?", 
+        desc: "Or is it an ongoing negotiation with pain, memory and identity? Exploring modern emotional landscapes under ancient lenses.", 
+        tag: "Research", 
+        url: "articles/can-healing-be-ever-completed.html",
+        img: "" // 纯文字测试
+    },
+    { 
+        title: "Gender Diversity Is Fashionable, but Is It Valuable?", 
+        desc: "John Locke Shortlisted Essay. An analysis of structural valuation framework against societal corporate trends.", 
+        tag: "Research", 
+        url: "articles/gender-diversity-fashionable-or-valuable.html",
+        img: "" 
+    },
+    { 
+        title: "Why Bananas Are Statistically Suspicious", 
+        desc: "Evidence suggests bananas know more than they reveal. A lighthearted walkthrough on skewness and absolute deviation metrics.", 
+        tag: "Experiments", 
+        url: "articles/bananas-statistical.html",
+        img: "" 
+    },
+    { 
+        title: "The Cat That Solved Thermodynamics", 
+        desc: "An unexpected contribution to modern science. Explaining closed-system equilibrium frameworks through domestic feline patterns.", 
+        tag: "Experiments", 
+        url: "articles/cat-thermodynamics.html",
+        img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" // 次级有图测试
+    },
+    {
+        title: "Marginal Gains and Meditations on Marcus Aurelius",
+        desc: "Deconstructing Meditations through modern micro-economic scaling theories. How constant optimization results in cognitive plateauing.",
+        tag: "Ex Libris",
+        url: "#",
+        img: ""
+    }
+];
+
+// -------------------------------------------------------------------------
+// 核心控制层
+// -------------------------------------------------------------------------
+let currentFilter = "ALL";
+let itemsToShow = 2; // 默认初始流列表只展示 2 篇，保持页面精炼
+
+const featuredContainer = document.getElementById("featuredContainer");
+const articleListContainer = document.getElementById("articleListContainer");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+const filterMatrix = document.getElementById("filterMatrix");
+
+function updateCounts() {
+    document.getElementById("count-ALL").textContent = database.length;
+    ['Extensions', 'Research', 'Ex Libris', 'Experiments'].forEach(tag => {
+        const count = database.filter(item => item.tag === tag).length;
+        const id = "count-" + tag.replace(" ", "");
+        const el = document.getElementById(id);
+        if(el) el.textContent = count;
+    });
+}
+
+function render() {
+    const featuredArticle = database.find(item => item.featured) || database[0];
+    
+    // 1. 置顶位渲染
+    if (currentFilter === "ALL" && featuredArticle) {
+        featuredContainer.style.display = "block";
+        const hasImg = featuredArticle.img && featuredArticle.img.trim() !== "";
+        featuredContainer.innerHTML = `
+            <div class="card featured-showcase-card ${hasImg ? '' : 'no-image'}" onclick="location.href='${featuredArticle.url}'">
+                <div class="card-content showcase-text">
+                    <div class="label">Featured / ${featuredArticle.tag}</div>
+                    <div class="card-title">${featuredArticle.title}</div>
+                    <div class="card-desc">${featuredArticle.desc}</div>
+                </div>
+                ${hasImg ? `
+                <div class="showcase-img-wrapper">
+                    <img src="${featuredArticle.img}" alt="showcase" class="showcase-img">
+                </div>` : ''}
+            </div>
+        `;
+    } else {
+        featuredContainer.innerHTML = "";
+        featuredContainer.style.display = "none";
+    }
+
+    // 2. 数据过滤
+    let streamData = database;
+    if (currentFilter !== "ALL") {
+        streamData = database.filter(item => item.tag === currentFilter);
+    } else {
+        streamData = database.filter(item => item !== featuredArticle);
+    }
+
+    // 3. 截取分页配额
+    const slicedData = streamData.slice(0, itemsToShow);
+    
+    // 4. 流列表渲染
+    if(slicedData.length === 0) {
+        articleListContainer.innerHTML = `<div style="padding: 32px; opacity: 0.5; font-size:0.95rem;">No logs found under this matrix index.</div>`;
+    } else {
+        articleListContainer.innerHTML = slicedData.map(item => {
+            const hasImg = item.img && item.img.trim() !== "";
+            return `
+                <div class="card text-article-card ${hasImg ? 'has-image' : ''}" onclick="location.href='${item.url}'">
+                    ${hasImg ? `
+                    <div class="inline-img-wrapper">
+                        <img src="${item.img}" alt="article graphic">
+                    </div>` : ''}
+                    <div class="card-content">
+                        <div class="label">${item.tag}</div>
+                        <div class="card-title">${item.title}</div>
+                        <div class="card-desc">${item.desc}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // 5. 控制 Load More 隐藏/出现
+    if (itemsToShow >= streamData.length) {
+        loadMoreBtn.classList.add("hidden");
+    } else {
+        loadMoreBtn.classList.remove("hidden");
+    }
+}
+
+// -------------------------------------------------------------------------
+// 事件驱动
+// -------------------------------------------------------------------------
+loadMoreBtn.addEventListener('click', () => {
+    itemsToShow += 3; // 每次追加 3 篇
+    render();
+});
+
+filterMatrix.addEventListener('click', (e) => {
+    const item = e.target.closest('.cat-item');
+    if (!item) return;
+
+    document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+    item.classList.add('active');
+
+    currentFilter = item.getAttribute('data-tag');
+    itemsToShow = 2; // 切类目时重置初始展示配额
+    
+    articleListContainer.style.opacity = 0.3;
+    setTimeout(() => {
+        render();
+        articleListContainer.style.opacity = 1;
+    }, 80);
+});
+
+updateCounts();
+render();
+</script>
+</body>
+</html>
