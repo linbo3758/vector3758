@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Electricity Sandbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+    --energy-color: #FFB800;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.4;
+}
+
+@media (max-width: 1100px) { body { padding: 36px 32px; } }
+@media (max-width: 860px) { body { padding: 28px 20px; } }
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero {
+    margin-bottom: 40px;
+}
+.logo {
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: -2px;
+    color: var(--text);
+    line-height: 1.05;
+}
+.logo span {
+    color: var(--accent);
+}
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 16px;
+}
+
+.main-layout {
+    display: flex;
+    gap: 32px;
+    align-items: stretch;
+}
+
+.interactive-zone {
+    flex: 3;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.control-zone {
+    flex: 2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    padding: 28px 26px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(5, 61, 130, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+}
+
+.label {
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+}
+
+.canvas-container {
+    width: 100%;
+    height: 320px;
+    background: #ffffff;
+    border: 1px solid var(--border-card);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Reference Lightbulb component */
+.bulb-component {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border: 2px solid var(--text);
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 10;
+    box-shadow: 0 0 0 4px #fff;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.bulb-component.lit {
+    background: #FFF9E6;
+    border-color: var(--energy-color);
+    box-shadow: 0 0 20px rgba(255, 184, 0, 0.4), 0 0 0 4px #fff;
+}
+
+.gate-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: dashed rgba(5, 61, 130, 0.2);
+    z-index: 5;
+}
+
+/* Charge Component (Squares) */
+.charge-square {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--text);
+    background: rgba(255,255,255,0.95);
+    top: calc(50% - 24px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8px, 1fr));
+    gap: 3px;
+    padding: 6px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    z-index: 8;
+}
+
+.charge-square.empty {
+    border-color: rgba(5, 61, 130, 0.4);
+}
+
+.energy-dot {
+    width: 7px;
+    height: 7px;
+    background-color: var(--energy-color);
+    border-radius: 50%;
+}
+
+/* Control Panel Inputs */
+.slider-group {
+    margin-bottom: 24px;
+}
+.slider-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+.slider-label span.val {
+    font-weight: 600;
+    color: var(--text);
+}
+.slider-input {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: #eef2f7;
+    outline: none;
+    border-radius: 3px;
+}
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--text);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.slider-input::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.equation-breakdown {
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+.eq-block {
+    background: var(--hover-bg);
+    padding: 16px;
+    border-left: 4px solid var(--accent);
+    margin-top: 12px;
+    font-size: 0.95rem;
+}
+.math-term {
+    font-weight: 600;
+}
+.square-text { color: var(--text); font-weight: 600; }
+.dot-text { color: #D19000; font-weight: 600; }
+
+@media (max-width: 900px) {
+    .main-layout { flex-direction: column; }
+    .interactive-zone, .control-zone { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <div class="logo">Deconstructing <span>Electricity</span></div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="main-layout">
+        <div class="interactive-zone">
+            <div class="card" style="padding:0; height: auto;">
+                <div class="canvas-container" id="circuitCanvas">
+                    <div class="gate-line"></div>
+                    <div class="bulb-component lit" id="bulb">💡</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Comprehension Dashboard</div>
+                <div class="equation-breakdown">
+                    <div class="eq-block">
+                        🔹 1 <span class="square-text">Square</span> = <strong>1 Coulomb of Charge (Q)</strong><br>
+                        🔹 1 <span class="dot-text">Gold Circle</span> = <strong>1 Joule of Energy (E)</strong>
+                    </div>
+                    <div class="eq-block" style="border-left-color: var(--text);">
+                        🎯 <strong>Current (I = Q/t):</strong> How many <span class="square-text">Squares</span> pass through the bulb per second?<br>
+                        👉 Current: <span class="math-term" id="explainCurrent">3 A</span> (determined by Voltage / Resistance)
+                    </div>
+                    <div class="eq-block" style="border-left-color: #FFB800;">
+                        🎯 <strong>Voltage (V = E/Q):</strong> How many <span class="dot-text">Gold Circles</span> each square brings into the bulb?<br>
+                        👉 Voltage: <span class="math-term" id="explainVoltage">4 V</span> (energy is completely transferred inside the bulb)
+                    </div>
+                    <div class="eq-block" style="border-left-color: #4fe77b; background: #f5fff7;">
+                        🎯 <strong>Power (P = I × V):</strong> Total energy transferred to the bulb per second.<br>
+                        👉 Power: <span id="explainMath">3 × 4</span> = <span class="math-term" id="explainPowerW">12 W</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-zone">
+            <div class="card">
+                <div class="label">Circuit Variables</div>
+                <div class="card-title">Adjust Parameters</div>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Voltage (V) — <em>Energy per Charge</em></span>
+                        <span class="val" id="valVoltage">4 V</span>
+                    </div>
+                    <input type="range" min="1" max="9" value="4" class="slider-input" id="slideVoltage">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Resistance (R) — <em>Opposition to Flow</em></span>
+                        <span class="val" id="valResistance">2 Ω</span>
+                    </div>
+                    <input type="range" min="1" max="5" value="2" class="slider-input" id="slideResistance">
+                </div>
+
+                <div class="slider-group" style="margin-top: 10px; padding-top: 15px; border-top: 1px solid var(--border-card);">
+                    <div class="slider-label" style="margin-bottom: 0;">
+                        <span style="font-weight: 600;">Resulting Current (I = V/R):</span>
+                        <span class="val" id="valCurrent" style="color: var(--accent); font-size: 1.1rem;">2.00 A</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="background: var(--hover-bg);">
+                <div class="label">GCSE Formulas Reference</div>
+                <div class="card-note" style="font-size:0.9rem; opacity:0.9; line-height: 1.8;">
+                    • <code>I = Q / t</code> &nbsp;(Current = Charges passing per second)<br>
+                    • <code>V = E / Q</code> &nbsp;(Voltage = Energy lost per charge in the bulb)<br>
+                    • <code>I = V / R</code> &nbsp;(Ohm's Law: Resistance limits the flow rate)<br>
+                    • <code>P = I &times; V</code> &nbsp;(Power = Total energy converted per second)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('circuitCanvas');
+    const bulb = document.getElementById('bulb');
+    const slideVoltage = document.getElementById('slideVoltage');
+    const slideResistance = document.getElementById('slideResistance');
+    
+    const valCurrent = document.getElementById('valCurrent');
+    const valVoltage = document.getElementById('valVoltage');
+    const valResistance = document.getElementById('valResistance');
+    
+    const explainCurrent = document.getElementById('explainCurrent');
+    const explainVoltage = document.getElementById('explainVoltage');
+    const explainMath = document.getElementById('explainMath');
+    const explainPowerW = document.getElementById('explainPowerW');
+
+    let voltage = parseInt(slideVoltage.value);
+    let resistance = parseInt(slideResistance.value);
+    let current = voltage / resistance; // I = V/R
+
+    let squaresArray = [];
+    let lastSpawnTime = 0;
+
+    function updateCalculations() {
+        current = voltage / resistance;
+        
+        valVoltage.textContent = voltage + " V";
+        valResistance.textContent = resistance + " Ω";
+        valCurrent.textContent = current.toFixed(2) + " A";
+        
+        explainCurrent.textContent = current.toFixed(2) + " A";
+        explainVoltage.textContent = voltage + " V";
+        
+        explainMath.textContent = current.toFixed(2) + " A × " + voltage + " V";
+        explainPowerW.textContent = (current * voltage).toFixed(1) + " W";
+
+        if (voltage > 0) {
+            bulb.classList.add('lit');
+            bulb.style.opacity = 0.4 + (voltage / 9) * 0.6;
+        } else {
+            bulb.classList.remove('lit');
+        }
+    }
+
+    function createChargeSquare() {
+        const sq = document.createElement('div');
+        sq.classList.add('charge-square');
+        sq.hasEnergy = true; // State to track if energy is consumed
+        
+        // Add energy circles initially
+        for(let i=0; i<voltage; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('energy-dot');
+            sq.appendChild(dot);
+        }
+        
+        sq.xPos = -50; 
+        sq.style.left = sq.xPos + 'px';
+        
+        canvas.appendChild(sq);
+        squaresArray.push(sq);
+    }
+
+    function animate(timestamp) {
+        // Spawn interval depends on current (calculated from V and R)
+        let spawnInterval = 1000 / (current * 0.8); 
+        
+        if (timestamp - lastSpawnTime > spawnInterval && current > 0) {
+            createChargeSquare();
+            lastSpawnTime = timestamp;
+        }
+
+        // Speed is proportional to the calculated current
+        let moveSpeed = (current * 1.5) + 1.0; 
+        let midPoint = canvas.offsetWidth / 2;
+
+        for (let i = squaresArray.length - 1; i >= 0; i--) {
+            let sq = squaresArray[i];
+            sq.xPos += moveSpeed;
+            sq.style.left = sq.xPos + 'px';
+
+            // Visual effect: When crossing the bulb, the bulb takes all its energy dots
+            if (sq.xPos + 24 >= midPoint && sq.hasEnergy) {
+                sq.hasEnergy = false;
+                sq.innerHTML = ''; // Strip all energy dots out
+                sq.classList.add('empty');
+                
+                // Flash the bulb slightly on delivery
+                bulb.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                setTimeout(() => { bulb.style.transform = 'translate(-50%, -50%) scale(1)'; }, 50);
+            }
+
+            if (sq.xPos > canvas.offsetWidth + 50) {
+                sq.remove();
+                squaresArray.splice(i, 1);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    slideVoltage.addEventListener('input', (e) => {
+        voltage = parseInt(e.target.value);
+        updateCalculations();
+    });
+
+    slideResistance.addEventListener('input', (e) => {
+        resistance = parseInt(e.target.value);
+        updateCalculations();
+    });
+
+    // Run
+    updateCalculations();
+    requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
