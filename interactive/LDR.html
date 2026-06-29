@@ -257,7 +257,16 @@ body {
             </svg>
         </div>
 
-      <div class="rule-box" style="border-left-color: var(--energy-color); margin-top: 20px;">
+
+        <div class="rule-box" id="ruleBox">
+            <div class="explanation-text" id="explanationText">
+                ☀️ <strong>Bright Day:</strong> Low resistance in the LDR branch. Current easily flows through the first branch.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="rule-box" style="border-left-color: var(--energy-color); margin-top: 20px;">
     <div class="label" style="margin-bottom: 10px;">LDR Characteristic Graph</div>
     <div style="display: flex; justify-content: center; background: #ffffff; padding: 20px; border: 1px solid var(--border-card);">
         <svg width="360" height="240" viewBox="0 0 360 240" style="font-family: 'Inter', sans-serif;">
@@ -274,15 +283,7 @@ body {
         </svg>
     </div>
 </div>
-
-        <div class="rule-box" id="ruleBox">
-            <div class="explanation-text" id="explanationText">
-                ☀️ <strong>Bright Day:</strong> Low resistance in the LDR branch. Current easily flows through the first branch.
-            </div>
-        </div>
-    </div>
-</div>
-
+    
 <script>
     const sandbox = document.getElementById('sandbox');
     const envToggle = document.getElementById('envToggle');
