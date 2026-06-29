@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Circuit Rules: Series vs Parallel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+    --energy-color: #FFB800;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.4;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero {
+    margin-bottom: 40px;
+}
+.logo {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -1.5px;
+    color: var(--text);
+}
+.logo span { color: var(--accent); }
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 16px;
+}
+
+.circuit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+@media (max-width: 1100px) {
+    .circuit-grid { grid-template-columns: 1fr; }
+}
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    padding: 28px 26px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.label {
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.card-title-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+/* Control Button Styling */
+.ctrl-btn {
+    background: var(--text);
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.ctrl-btn:hover {
+    background: #032754;
+}
+.ctrl-btn.paused {
+    background: #e65100;
+}
+
+/* Diagram Viewport with exact Circuit Symbols */
+.diagram-container {
+    width: 100%;
+    height: 260px;
+    background: #ffffff;
+    border: 1px solid var(--border-card);
+    position: relative;
+    overflow: hidden;
+}
+
+/* SVG Overlay for Standard Circuit Diagrams */
+.circuit-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    stroke: var(--text);
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+}
+
+/* Flowing Charge Styles */
+.charge-square {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--text);
+    background: #ffffff;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    align-content: center;
+    justify-content: center;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+}
+.charge-square.empty { border-color: rgba(5, 61, 130, 0.3); }
+.energy-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--energy-color);
+    border-radius: 50%;
+}
+
+/* Rule Highlight Table/Blocks */
+.rule-box {
+    background: var(--hover-bg);
+    padding: 20px;
+    border-left: 4px solid var(--text);
+}
+.rule-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(5, 61, 130, 0.08);
+}
+.rule-row:last-child { border-bottom: none; }
+.rule-name { font-weight: 500; }
+.rule-status { font-weight: 600; text-transform: uppercase; }
+.status-same { color: #0097A7; }
+.status-split { color: #E65100; }
+
+.formula-note {
+    font-size: 0.88rem;
+    opacity: 0.8;
+    margin-top: 12px;
+    line-height: 1.5;
+}
+.code-inline {
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: rgba(5, 61, 130, 0.05);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <div class="logo">Electricity: <span>Series and Parallel Circuits</span></div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="circuit-grid">
+        
+        <div class="card">
+            <div class="card-title-area">
+                <div>
+                    <div class="label">Diagram A</div>
+                    <div class="card-title">Series Circuit Diagram</div>
+                </div>
+                <button class="ctrl-btn" id="btnSeries">Pause Flow</button>
+            </div>
+            
+            <div class="diagram-container" id="seriesContainer">
+                <svg class="circuit-svg">
+                    <rect x="50" y="40" width="540" height="180" rx="0" />
+                    <path d="M 310 30 L 310 50 M 313 20 L 313 60 M 317 30 L 317 50 M 320 20 L 320 60" stroke-width="3" />
+                    <rect x="180" y="120" width="40" height="40" fill="#ffffff" stroke="none"/>
+                    <rect x="420" y="120" width="40" height="40" fill="#ffffff" stroke="none"/>
+                    <circle cx="200" cy="220" r="16" fill="#ffffff"/>
+                    <path d="M 189 209 L 211 231 M 211 209 L 189 231" />
+                    <circle cx="440" cy="220" r="16" fill="#ffffff"/>
+                    <path d="M 429 209 L 451 231 M 451 209 L 429 231" />
+                </svg>
+            </div>
+
+            <div class="rule-box" style="border-left-color: #0097A7;">
+                <div class="rule-row">
+                    <span class="rule-name">Current (I)</span>
+                    <span class="rule-status status-same">SAME everywhere</span>
+                </div>
+                <div class="rule-row">
+                    <span class="rule-name">Voltage (V)</span>
+                    <span class="rule-status status-split">SPLIT across components</span>
+                </div>
+                <div class="formula-note">
+                    <strong>Key Concept:</strong> Since there is only 1 loop, the rate of flow (Current) cannot change. However, the energy per charge (Voltage) must be shared between the bulbs: <span class="code-inline">Vtotal = V1 + V2</span>.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title-area">
+                <div>
+                    <div class="label">Diagram B</div>
+                    <div class="card-title">Parallel Circuit Diagram</div>
+                </div>
+                <button class="ctrl-btn" id="btnParallel">Pause Flow</button>
+            </div>
+            
+            <div class="diagram-container" id="parallelContainer">
+                <svg class="circuit-svg">
+                    <path d="M 50 130 L 180 130 L 180 60 L 460 60 L 460 130 L 590 130" />
+                    <path d="M 180 130 L 180 200 L 460 200 L 460 130" />
+                    <path d="M 50 130 L 50 40 L 590 40 L 590 130" />
+                    <path d="M 310 30 L 310 50 M 313 20 L 313 60 M 317 30 L 317 50 M 320 20 L 320 60" stroke-width="3" />
+                    <circle cx="180" cy="130" r="4" fill="#053D82" />
+                    <circle cx="460" cy="130" r="4" fill="#053D82" />
+                    <circle cx="320" cy="60" r="16" fill="#ffffff"/>
+                    <path d="M 309 49 L 331 71 M 331 49 L 309 71" />
+                    <circle cx="320" cy="200" r="16" fill="#ffffff"/>
+                    <path d="M 309 189 L 331 211 M 331 189 L 309 211" />
+                </svg>
+            </div>
+
+            <div class="rule-box" style="border-left-color: #E65100;">
+                <div class="rule-row">
+                    <span class="rule-name">Current (I)</span>
+                    <span class="rule-status status-split">SPLIT down branches</span>
+                </div>
+                <div class="rule-row">
+                    <span class="rule-name">Voltage (V)</span>
+                    <span class="rule-status status-same">SAME on each branch</span>
+                </div>
+                <div class="formula-note">
+                    <strong>Key Concept:</strong> The junctions split the traffic (Current): <span class="code-inline">Itotal = I1 + I2</span>. But because each charge only travels through one single branch, it delivers its full energy payload to that branch's bulb: <span class="code-inline">Vtotal = V1 = V2</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const sContainer = document.getElementById('seriesContainer');
+    const pContainer = document.getElementById('parallelContainer');
+    const btnSeries = document.getElementById('btnSeries');
+    const btnParallel = document.getElementById('btnParallel');
+
+    let sCharges = [];
+    let pCharges = [];
+    let lastS = 0, lastP = 0;
+    
+    // Play/Pause State Flags
+    let isSeriesRunning = true;
+    let isParallelRunning = true;
+
+    function setDots(el, count) {
+        el.innerHTML = '';
+        for(let i=0; i<count; i++) {
+            let d = document.createElement('div');
+            d.classList.add('energy-dot');
+            el.appendChild(d);
+        }
+    }
+
+    // Toggle Handlers
+    btnSeries.addEventListener('click', () => {
+        isSeriesRunning = !isSeriesRunning;
+        btnSeries.textContent = isSeriesRunning ? "Pause Flow" : "Resume Flow";
+        btnSeries.classList.toggle('paused', !isSeriesRunning);
+    });
+
+    btnParallel.addEventListener('click', () => {
+        isParallelRunning = !isParallelRunning;
+        btnParallel.textContent = isParallelRunning ? "Pause Flow" : "Resume Flow";
+        btnParallel.classList.toggle('paused', !isParallelRunning);
+    });
+
+    function animate(timestamp) {
+        // --- SERIES ENGINE ---
+        if (isSeriesRunning) {
+            if (timestamp - lastS > 1400) {
+                let c = document.createElement('div');
+                c.classList.add('charge-square');
+                c.progress = 0;
+                c.stage = 0;
+                setDots(c, 4);
+                sContainer.appendChild(c);
+                sCharges.push(c);
+                lastS = timestamp;
+            }
+
+            for (let i = sCharges.length - 1; i >= 0; i--) {
+                let c = sCharges[i];
+                c.progress += 0.3;
+
+                let x, y;
+                if (c.progress < 25) {
+                    x = 320 + (c.progress / 25) * 270;
+                    y = 40;
+                } else if (c.progress < 50) {
+                    x = 590;
+                    y = 40 + ((c.progress - 25) / 25) * 180;
+                } else if (c.progress < 75) {
+                    x = 590 - ((c.progress - 50) / 25) * 540;
+                    y = 220;
+                    
+                    if (x <= 440 && c.stage === 0) { c.stage = 1; setDots(c, 2); }
+                    if (x <= 200 && c.stage === 1) { c.stage = 2; c.innerHTML = ''; c.classList.add('empty'); }
+                } else if (c.progress < 100) {
+                    x = 50;
+                    y = 220 - ((c.progress - 75) / 25) * 180;
+                } else {
+                    x = 50 + ((c.progress - 100) / 25) * 270;
+                    y = 40;
+                }
+
+                c.style.left = x + 'px';
+                c.style.top = y + 'px';
+
+                if (c.progress >= 125) { c.remove(); sCharges.splice(i, 1); }
+            }
+        }
+
+        // --- PARALLEL ENGINE ---
+        if (isParallelRunning) {
+            if (timestamp - lastP > 700) {
+                let c = document.createElement('div');
+                c.classList.add('charge-square');
+                c.progress = 0;
+                c.hasDropped = false;
+                setDots(c, 4);
+                c.route = Math.random() > 0.5 ? 'top' : 'bottom';
+                pContainer.appendChild(c);
+                pCharges.push(c);
+                lastP = timestamp;
+            }
+
+            for (let i = pCharges.length - 1; i >= 0; i--) {
+                let c = pCharges[i];
+                c.progress += 0.4;
+
+                let x, y;
+                if (c.progress < 20) {
+                    x = 50 + (c.progress / 20) * 130;
+                    y = 130;
+                } else if (c.progress < 35) {
+                    x = 180;
+                    let pct = (c.progress - 20) / 15;
+                    y = c.route === 'top' ? 130 - pct * 70 : 130 + pct * 70;
+                } else if (c.progress < 70) {
+                    let pct = (c.progress - 35) / 35;
+                    x = 180 + pct * 280;
+                    y = c.route === 'top' ? 60 : 200;
+
+                    if (x >= 320 && !c.hasDropped) {
+                        c.hasDropped = true;
+                        c.innerHTML = '';
+                        c.classList.add('empty');
+                    }
+                } else if (c.progress < 85) {
+                    x = 460;
+                    let pct = (c.progress - 70) / 15;
+                    y = c.route === 'top' ? 60 + pct * 70 : 200 - pct * 70;
+                } else {
+                    let pct = (c.progress - 85) / 15;
+                    x = 460 + pct * 130;
+                    y = 130;
+                }
+
+                c.style.left = x + 'px';
+                c.style.top = y + 'px';
+
+                if (c.progress >= 100) { c.remove(); pCharges.splice(i, 1); }
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
