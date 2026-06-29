@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Parallel Circuit: LDR and Bulb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+    --energy-color: #FFB800;
+    
+    /* Environment Colours */
+    --env-bg: #FFF9E6; /* Bright Day Beige */
+    --particle-color: #00D2FC; /* Electrical Blue */
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.4;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.hero {
+    margin-bottom: 40px;
+}
+.logo {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -1.5px;
+    color: var(--text);
+}
+.logo span { color: var(--accent); }
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 16px;
+}
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    padding: 28px 26px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.label {
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.card-title-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+/* Day/Night Toggle Button */
+.env-toggle {
+    background: #ffffff;
+    border: 2px solid var(--text);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.env-toggle:hover {
+    transform: scale(1.05);
+}
+
+/* Sandbox Circuit Viewport */
+.diagram-container {
+    width: 100%;
+    height: 340px;
+    background: var(--env-bg);
+    border: 1px solid var(--border-card);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.5s ease;
+}
+
+/* Dark Night Mode Overrides */
+.diagram-container.dark-mode {
+    --env-bg: #0A192F; /* Deep Blue Night */
+    background: var(--env-bg);
+}
+
+/* Standard Circuit Schematic Lines */
+.circuit-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    stroke: var(--text);
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke 0.5s;
+}
+.diagram-container.dark-mode .circuit-svg {
+    stroke: #ffffff;
+}
+.diagram-container.dark-mode .junction-dot {
+    fill: #ffffff;
+}
+
+.junction-dot {
+    fill: var(--text);
+    transition: fill 0.5s;
+}
+
+/* Solid Blue Current Tracking Particles */
+.current-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--particle-color);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--particle-color);
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+/* Component Styling: Light Bulb Glow Behaviour */
+.bulb-circle {
+    fill: var(--env-bg);
+    transition: fill 0.5s;
+}
+.diagram-container.dark-mode .bulb-circle {
+    fill: #FFF1C5; /* Lights up yellow */
+}
+
+.bulb-rays {
+    stroke: var(--energy-color);
+    stroke-width: 2.5;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.diagram-container.dark-mode .bulb-rays {
+    opacity: 1; /* Yellow outward arrows appear */
+}
+
+/* Component Styling: LDR fill background sync */
+.ldr-bg {
+    fill: var(--env-bg);
+    transition: fill 0.5s;
+}
+
+/* Explanation Panel */
+.rule-box {
+    background: var(--hover-bg);
+    padding: 22px;
+    border-left: 4px solid var(--text);
+}
+.explanation-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text);
+}
+.status-tag {
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    background: rgba(5, 61, 130, 0.06);
+    border-radius: 3px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <div class="logo"> Electricity <span>LDR</span></div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title-area">
+            <div>
+                <div class="label">Sandbox</div>
+                <div class="card-title" id="conditionTitle">Light Condition: Bright Day</div>
+            </div>
+            <button class="env-toggle" id="envToggle" title="Toggle Light/Dark">☀️</button>
+        </div>
+        
+        <div class="diagram-container" id="sandbox">
+            <svg class="circuit-svg">
+                <path d="M 150 50 L 650 50" />
+                <path d="M 150 50 L 150 250" />
+                <path d="M 650 250 L 650 50" />
+                <path d="M 150 150 L 650 150" />
+                <path d="M 150 250 L 650 250" />
+                
+                <g stroke-width="3">
+                    <path d="M 390 35 L 390 65 M 395 20 L 395 80 M 402 35 L 402 65 M 407 20 L 407 80" />
+                </g>
+                
+                <circle cx="150" cy="150" r="5" class="junction-dot" />
+                <circle cx="650" cy="150" r="5" class="junction-dot" />
+                
+                <g transform="translate(400, 150)">
+                    <rect x="-25" y="-12" width="50" height="24" class="ldr-bg" />
+                    <circle cx="0" cy="0" r="22" />
+                    <path d="M -34 -34 L -24 -24 M -24 -24 L -29 -23 M -24 -24 L -23 -29" />
+                    <path d="M -42 -22 L -32 -12 M -32 -12 L -37 -11 M -32 -12 L -11 -31" stroke="none" />
+                    <path d="M -42 -22 L -32 -12 M -32 -12 L -37 -11 M -32 -12 L -31 -16" />
+                </g>
+                
+                <g transform="translate(400, 250)">
+                    <g class="bulb-rays">
+                        <path d="M 0 -28 L 0 -38 M 0 28 L 0 38 M -28 0 L -38 0 M 28 0 L 38 0" />
+                        <path d="M -20 -20 L -27 -27 M 20 -20 L 27 -27 M -20 20 L -27 27 M 20 20 L 27 27" />
+                    </g>
+                    <circle cx="0" cy="0" r="18" class="bulb-circle" />
+                    <path d="M -12.5 -12.5 L 12.5 12.5 M 12.5 -12.5 L -12.5 12.5" />
+                </g>
+            </svg>
+        </div>
+
+      <div class="rule-box" style="border-left-color: var(--energy-color); margin-top: 20px;">
+    <div class="label" style="margin-bottom: 10px;">LDR Characteristic Graph</div>
+    <div style="display: flex; justify-content: center; background: #ffffff; padding: 20px; border: 1px solid var(--border-card);">
+        <svg width="360" height="240" viewBox="0 0 360 240" style="font-family: 'Inter', sans-serif;">
+            <path d="M 50 20 L 50 200 L 320 200" stroke="#053D82" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M 45 30 L 50 20 L 55 30" stroke="#053D82" stroke-width="2" fill="none"/>
+            <path d="M 310 195 L 320 200 L 310 205" stroke="#053D82" stroke-width="2" fill="none"/>
+            
+            <text x="18" y="110" fill="#053D82" font-size="12" font-weight="600" transform="rotate(-90 18 110)" text-anchor="middle">Resistance (R)</text>
+            <text x="185" y="225" fill="#053D82" font-size="12" font-weight="600" text-anchor="middle">Light Intensity (I)</text>
+            
+            <path d="M 65 45 C 75 140, 140 185, 300 190" stroke="#FFB800" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            
+            <text x="40" y="215" fill="#053D82" font-size="11" opacity="0.6">0</text>
+        </svg>
+    </div>
+</div>
+
+        <div class="rule-box" id="ruleBox">
+            <div class="explanation-text" id="explanationText">
+                ☀️ <strong>Bright Day:</strong> Low resistance in the LDR branch. Current easily flows through the first branch.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sandbox = document.getElementById('sandbox');
+    const envToggle = document.getElementById('envToggle');
+    const conditionTitle = document.getElementById('conditionTitle');
+    const explanationText = document.getElementById('explanationText');
+
+    let isBright = true;
+    let particles = [];
+    let lastSpawn = 0;
+
+    // Toggle Environment State
+    envToggle.addEventListener('click', () => {
+        isBright = !isBright;
+        if (isBright) {
+            envToggle.textContent = "☀️";
+            sandbox.classList.remove('dark-mode');
+            conditionTitle.textContent = "Light Condition: Bright Day";
+            explanationText.innerHTML = `☀️ <strong>Bright Day:</strong> Low resistance in the LDR branch. Current easily flows through the first branch.`;
+        } else {
+            envToggle.textContent = "⭐";
+            sandbox.classList.add('dark-mode');
+            conditionTitle.textContent = "Light Condition: Dark Night";
+            explanationText.innerHTML = `⭐ <strong>Dark Night:</strong> High resistance in the LDR branch. Current flows through the lower branch instead, lighting up the bulb.`;
+        }
+    });
+
+    // Generate Tracking Particle
+    function createParticle(route) {
+        let p = document.createElement('div');
+        p.classList.add('current-particle');
+        
+        // Define clean sequential waypoint coordinates based on selected branch
+        // Conventional Current Flow: Clockwise from Battery positive (Left to Right)
+        if (route === 'ldr') {
+            p.waypoints = [
+                {x: 150, y: 50},   // Top Left Corner
+                {x: 150, y: 150},  // Left Junction
+                {x: 650, y: 150},  // Across LDR Branch (First Branch)
+                {x: 650, y: 50},   // Top Right Corner
+                {x: 390, y: 50}    // Back to Battery
+            ];
+        } else {
+            p.waypoints = [
+                {x: 150, y: 50},   // Top Left Corner
+                {x: 150, y: 150},  // Left Junction
+                {x: 150, y: 250},  // Down to Bottom Left
+                {x: 650, y: 250},  // Across Bulb Branch (Second Branch)
+                {x: 650, y: 150},  // Up to Right Junction
+                {x: 650, y: 50},   // Top Right Corner
+                {x: 390, y: 50}    // Back to Battery
+            ];
+        }
+        
+        p.currentIdx = 0;
+        p.x = 390; 
+        p.y = 50;
+        p.style.left = p.x + 'px';
+        p.style.top = p.y + 'px';
+        
+        sandbox.appendChild(p);
+        particles.push(p);
+    }
+
+    function animate(timestamp) {
+        // Continuous uniform spawning
+        if (timestamp - lastSpawn > 250) {
+            let selectedRoute = 'ldr';
+            if (isBright) {
+                // Bright day: Low resistance in LDR, particles prefer first branch
+                selectedRoute = Math.random() > 0.15 ? 'ldr' : 'main';
+            } else {
+                // Dark night: High resistance in LDR, particles forced into second branch (bulb)
+                selectedRoute = Math.random() > 0.90 ? 'ldr' : 'main';
+            }
+            createParticle(selectedRoute);
+            lastSpawn = timestamp;
+        }
+
+        // Move active particles smoothly along waypoints
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            let target = p.waypoints[p.currentIdx];
+            
+            // Calculate distance to next tracking node
+            let dx = target.x - p.x;
+            let dy = target.y - p.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            
+            let speed = 4.5; // Pristine constant velocity
+            
+            if (dist <= speed) {
+                // Snapped to node point, target next step
+                p.x = target.x;
+                p.y = target.y;
+                p.currentIdx++;
+                
+                if (p.currentIdx >= p.waypoints.length) {
+                    p.remove();
+                    particles.splice(i, 1);
+                    continue;
+                }
+            } else {
+                // Progression step
+                p.x += (dx / dist) * speed;
+                p.y += (dy / dist) * speed;
+            }
+            
+            p.style.left = p.x + 'px';
+            p.style.top = p.y + 'px';
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Run Engine
+    requestAnimationFrame(animate);
+</script>
+
+</body>
