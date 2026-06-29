@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Parallel Circuit: Thermistor and Bulb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+    --energy-color: #FFB800;
+    
+    /* Low-saturation Environmental Colours */
+    --env-bg: #FAF0EE; /* Muted Soft Red for Hot */
+    --particle-color: #00D2FC;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.4;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.hero {
+    margin-bottom: 40px;
+}
+.logo {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -1.5px;
+    color: var(--text);
+}
+.logo span { color: var(--accent); }
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 16px;
+}
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    padding: 28px 26px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.label {
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.card-title-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+/* Temperature Toggle Button */
+.env-toggle {
+    background: #ffffff;
+    border: 2px solid var(--text);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.env-toggle:hover {
+    transform: scale(1.05);
+}
+
+/* Sandbox Circuit Viewport */
+.diagram-container {
+    width: 100%;
+    height: 340px;
+    background: var(--env-bg);
+    border: 1px solid var(--border-card);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.5s ease;
+}
+
+/* Muted Cold Mode Override (Low-saturation Light Blue) */
+.diagram-container.cold-mode {
+    --env-bg: #E6ECF0; 
+    background: var(--env-bg);
+}
+
+/* Standard Circuit Schematic Lines */
+.circuit-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    stroke: var(--text);
+    stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round;
+}
+
+.junction-dot {
+    fill: var(--text);
+}
+
+/* Solid Blue Current Tracking Particles */
+.current-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--particle-color);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--particle-color);
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+/* Component Styling: Light Bulb Glow Behaviour */
+.bulb-circle {
+    fill: var(--env-bg);
+    transition: fill 0.5s;
+}
+.diagram-container.cold-mode .bulb-circle {
+    fill: #FFF1C5; /* Lights up yellow in cold conditions */
+}
+
+.bulb-rays {
+    stroke: var(--energy-color);
+    stroke-width: 2.5;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.diagram-container.cold-mode .bulb-rays {
+    opacity: 1; /* Yellow outward arrows appear when cold */
+}
+
+/* Component Styling: Thermistor fill background sync */
+.thermistor-bg {
+    fill: var(--env-bg);
+    transition: fill 0.5s;
+}
+
+/* Explanation Panel */
+.rule-box {
+    background: var(--hover-bg);
+    padding: 22px;
+    border-left: 4px solid var(--text);
+}
+.explanation-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <div class="logo">Parallel Circuit: <span>Thermistor Behaviour</span></div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title-area">
+            <div>
+                <div class="label">Schematic Sandbox</div>
+                <div class="card-title" id="conditionTitle">Temperature Condition: Hot</div>
+            </div>
+            <button class="env-toggle" id="envToggle" title="Toggle Hot/Cold">🔥</button>
+        </div>
+        
+        <div class="diagram-container" id="sandbox">
+            <svg class="circuit-svg">
+                <path d="M 150 50 L 650 50" />
+                <path d="M 150 50 L 150 250" />
+                <path d="M 650 250 L 650 50" />
+                <path d="M 150 150 L 650 150" />
+                <path d="M 150 250 L 650 250" />
+                
+                <g stroke-width="3">
+                    <path d="M 390 35 L 390 65 M 395 20 L 395 80 M 402 35 L 402 65 M 407 20 L 407 80" />
+                </g>
+                
+                <circle cx="150" cy="150" r="5" class="junction-dot" />
+                <circle cx="650" cy="150" r="5" class="junction-dot" />
+                
+                <g transform="translate(400, 150)">
+                    <rect x="-25" y="-12" width="50" height="24" class="thermistor-bg" />
+                    <path d="M -30 16 L -22 16 L 22 -16" stroke-width="2.5" fill="none" />
+                </g>
+                
+                <g transform="translate(400, 250)">
+                    <g class="bulb-rays">
+                        <path d="M 0 -28 L 0 -38 M 0 28 L 0 38 M -28 0 L -38 0 M 28 0 L 38 0" />
+                        <path d="M -20 -20 L -27 -27 M 20 -20 L 27 -27 M -20 20 L -27 27 M 20 20 L 27 27" />
+                    </g>
+                    <circle cx="0" cy="0" r="18" class="bulb-circle" />
+                    <path d="M -12.5 -12.5 L 12.5 12.5 M 12.5 -12.5 L -12.5 12.5" />
+                </g>
+            </svg>
+        </div>
+
+
+        <div class="rule-box" id="ruleBox">
+            <div class="explanation-text" id="explanationText">
+                🔥 <strong>Bright Heat:</strong> Low resistance in the thermistor branch. Current easily flows through the first branch.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sandbox = document.getElementById('sandbox');
+    const envToggle = document.getElementById('envToggle');
+    const conditionTitle = document.getElementById('conditionTitle');
+    const explanationText = document.getElementById('explanationText');
+
+    let isHot = true;
+    let particles = [];
+    let lastSpawn = 0;
+
+    // Toggle Environment State (Hot / Cold)
+    envToggle.addEventListener('click', () => {
+        isHot = !isHot;
+        if (isHot) {
+            envToggle.textContent = "🔥";
+            sandbox.classList.remove('cold-mode');
+            conditionTitle.textContent = "Temperature Condition: Hot";
+            explanationText.innerHTML = `🔥 <strong>Hot Conditions:</strong> Low resistance in the thermistor branch. Current easily flows through the first branch.`;
+        } else {
+            envToggle.textContent = "❄️";
+            sandbox.classList.add('cold-mode');
+            conditionTitle.textContent = "Temperature Condition: Cold";
+            explanationText.innerHTML = `❄️ <strong>Cold Conditions:</strong> High resistance in the thermistor branch. Current flows through the lower branch instead, lighting up the bulb.`;
+        }
+    });
+
+        <div class="rule-box" style="border-left-color: #E65100; margin-top: 10px;">
+            <div class="label" style="margin-bottom: 10px;">Thermistor Characteristic Graph</div>
+            <div style="display: flex; justify-content: center; background: #ffffff; padding: 20px; border: 1px solid var(--border-card);">
+                <svg width="360" height="240" viewBox="0 0 360 240" style="font-family: 'Inter', sans-serif;">
+                    <path d="M 50 20 L 50 200 L 320 200" stroke="#053D82" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M 45 30 L 50 20 L 55 30" stroke="#053D82" stroke-width="2" fill="none"/>
+                    <path d="M 310 195 L 320 200 L 310 205" stroke="#053D82" stroke-width="2" fill="none"/>
+                    
+                    <text x="18" y="110" fill="#053D82" font-size="12" font-weight="600" transform="rotate(-90 18 110)" text-anchor="middle">Resistance (R)</text>
+                    <text x="185" y="225" fill="#053D82" font-size="12" font-weight="600" text-anchor="middle">Temperature (T)</text>
+                    
+                    <path d="M 65 45 C 75 140, 140 185, 300 190" stroke="#E65100" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    
+                    <text x="40" y="215" fill="#053D82" font-size="11" opacity="0.6">0</text>
+                </svg>
+            </div>
+        </div>
+
+  
+    // Generate Tracking Particle
+    function createParticle(route) {
+        let p = document.createElement('div');
+        p.classList.add('current-particle');
+        
+        // Define sequential waypoint coordinates based on selected branch
+        if (route === 'thermistor') {
+            p.waypoints = [
+                {x: 150, y: 50},   // Top Left Corner
+                {x: 150, y: 150},  // Left Junction
+                {x: 650, y: 150},  // Across Thermistor Branch (First Branch)
+                {x: 650, y: 50},   // Top Right Corner
+                {x: 390, y: 50}    // Back to Battery
+            ];
+        } else {
+            p.waypoints = [
+                {x: 150, y: 50},   // Top Left Corner
+                {x: 150, y: 150},  // Left Junction
+                {x: 150, y: 250},  // Down to Bottom Left
+                {x: 650, y: 250},  // Across Bulb Branch (Second Branch)
+                {x: 650, y: 150},  // Up to Right Junction
+                {x: 650, y: 50},   // Top Right Corner
+                {x: 390, y: 50}    // Back to Battery
+            ];
+        }
+        
+        p.currentIdx = 0;
+        p.x = 390; 
+        p.y = 50;
+        p.style.left = p.x + 'px';
+        p.style.top = p.y + 'px';
+        
+        sandbox.appendChild(p);
+        particles.push(p);
+    }
+
+    function animate(timestamp) {
+        if (timestamp - lastSpawn > 250) {
+            let selectedRoute = 'thermistor';
+            if (isHot) {
+                // Hot state: Low resistance in Thermistor, particles choose first branch
+                selectedRoute = Math.random() > 0.15 ? 'thermistor' : 'main';
+            } else {
+                // Cold state: High resistance in Thermistor, particles forced to second branch (bulb)
+                selectedRoute = Math.random() > 0.90 ? 'thermistor' : 'main';
+            }
+            createParticle(selectedRoute);
+            lastSpawn = timestamp;
+        }
+
+        // Move active particles along waypoints
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            let target = p.waypoints[p.currentIdx];
+            
+            let dx = target.x - p.x;
+            let dy = target.y - p.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            
+            let speed = 4.5;
+            
+            if (dist <= speed) {
+                p.x = target.x;
+                p.y = target.y;
+                p.currentIdx++;
+                
+                if (p.currentIdx >= p.waypoints.length) {
+                    p.remove();
+                    particles.splice(i, 1);
+                    continue;
+                }
+            } else {
+                p.x += (dx / dist) * speed;
+                p.y += (dy / dist) * speed;
+            }
+            
+            p.style.left = p.x + 'px';
+            p.style.top = p.y + 'px';
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
