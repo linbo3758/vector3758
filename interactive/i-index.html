@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Sandbox — Vector 3758</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-light: #ebebeb;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.4;
+}
+
+@media (max-width: 1100px) {
+    body { padding: 36px 32px; }
+}
+
+@media (max-width: 860px) {
+    body { padding: 28px 20px; }
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ---------- HERO 区块 ---------- */
+.hero {
+    margin-bottom: 52px;
+}
+.back-home {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+.back-home:hover { opacity: 1; }
+
+.logo {
+    font-size: 3.8rem;
+    font-weight: 600;
+    letter-spacing: -3px;
+    color: var(--text);
+    line-height: 1.05;
+}
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 22px;
+}
+
+/* ---------- 通用卡片样式 ---------- */
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    position: relative;
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), background 0.25s, border-color 0.25s, opacity 0.3s ease;
+    cursor: pointer;
+}
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(5, 61, 130, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 1;
+}
+.card:hover {
+    transform: translateY(-3px);
+    background: var(--hover-bg);
+    border-color: #d4d4d4;
+}
+.card-content {
+    padding: 32px;
+    position: relative;
+    z-index: 2;
+}
+.label {
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+.card-title {
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+    margin-bottom: 12px;
+}
+.card-desc {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    opacity: 0.8;
+}
+
+/* ---------- 动态网格布局 ---------- */
+.layout-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* 置顶精选位 */
+.featured-zone {
+    width: 100%;
+}
+.featured-showcase-card {
+    display: flex;
+    align-items: stretch;
+    min-height: 340px;
+}
+.showcase-text {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.showcase-text .card-title { font-size: 2.4rem; }
+
+/* 当置顶位没有图片时，文字区域平滑占满 100% */
+.featured-showcase-card.no-image .showcase-text {
+    flex: 1;
+}
+
+.showcase-img-wrapper {
+    flex: 2;
+    position: relative;
+    background: #f0f3f6;
+    overflow: hidden;
+    border-left: 1px solid var(--border-card);
+}
+.showcase-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+    opacity: 0.9;
+    transition: transform 0.4s ease;
+}
+.featured-showcase-card:hover .showcase-img {
+    transform: scale(1.02);
+}
+
+/* 不对称双栏 */
+.split-zone {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* 左栏主实验列表 */
+.text-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.text-article-card .card-title {
+    font-size: 1.6rem;
+}
+
+/* 左栏卡片带图时的自适应复合布局 */
+.text-article-card.has-image {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.text-article-card.has-image .card-content {
+    flex: 2;
+}
+.text-article-card.has-image .inline-img-wrapper {
+    flex: 1;
+    background: #f0f3f6;
+    border-left: 1px solid var(--border-card);
+    overflow: hidden;
+}
+.text-article-card.has-image .inline-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+}
+
+/* 右栏侧边栏（Sticky 磁吸） */
+.sidebar-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: sticky;
+    top: 48px;
+}
+
+/* 分类小部件 */
+.category-card {
+    cursor: default;
+}
+.category-card:hover {
+    transform: none;
+    background: var(--paper);
+    border-color: var(--border-card);
+}
+.cat-list {
+    list-style: none;
+    margin-top: 16px;
+}
+.cat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(5, 61, 130, 0.15);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.cat-item:hover {
+    color: var(--accent);
+}
+.cat-item.active {
+    font-weight: 600;
+    color: var(--text);
+    border-bottom-style: solid;
+    border-bottom-color: var(--accent);
+}
+.cat-count {
+    opacity: 0.5;
+}
+
+/* ---------- Load More 平衡器 ---------- */
+.load-more-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(5, 61, 130, 0.08);
+    width: 100%;
+}
+.load-more-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding-bottom: 4px;
+    border-bottom: 1.5px solid var(--text);
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.2s, transform 0.2s;
+}
+.load-more-btn:hover {
+    opacity: 1;
+    transform: translateY(1px);
+}
+.load-more-btn.hidden {
+    display: none;
+}
+
+/* 响应式适配 */
+@media (max-width: 960px) {
+    .featured-showcase-card {
+        flex-direction: column;
+    }
+    .showcase-img-wrapper {
+        height: 240px;
+        border-left: none;
+        border-top: 1px solid var(--border-card);
+    }
+    .split-zone {
+        grid-template-columns: 1fr;
+    }
+    .sidebar-zone {
+        position: static;
+    }
+    .text-article-card.has-image {
+        flex-direction: column;
+    }
+    .text-article-card.has-image .inline-img-wrapper {
+        height: 180px;
+        border-left: none;
+        border-bottom: 1px solid var(--border-card);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <a href="index.html" class="back-home">← Studio</a>
+        <div class="logo">Sandbox</div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="layout-stack">
+        <div class="featured-zone" id="featuredContainer"></div>
+        
+        <div class="split-zone">
+            <div class="text-list" id="sandboxListContainer"></div>
+
+            <div class="sidebar-zone">
+                <div class="card category-card">
+                    <div class="card-content">
+                        <div class="label" style="margin-bottom: 8px;">Index Matrix</div>
+                        <ul class="cat-list" id="filterMatrix">
+                            <li class="cat-item active" data-tag="ALL"><span>All Sandbox</span><span class="cat-count" id="count-ALL">0</span></li>
+                            <li class="cat-item" data-tag="gcse_practicals"><span>GCSE Practicals</span><span class="cat-count" id="count-gcse_practicals">0</span></li>
+                            <li class="cat-item" data-tag="a_level_practicals"><span>A-Level Practicals</span><span class="cat-count" id="count-a_level_practicals">0</span></li>
+                            <li class="cat-item" data-tag="matter"><span>Matter</span><span class="cat-count" id="count-matter">0</span></li>
+                            <li class="cat-item" data-tag="electricity"><span>Electricity</span><span class="cat-count" id="count-electricity">0</span></li>
+                            <li class="cat-item" data-tag="astrophysics"><span>Astrophysics</span><span class="cat-count" id="count-astrophysics">0</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn">Load More Sandbox ↓</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// -------------------------------------------------------------------------
+// 沙盒实验室数据库 (保留智能渲染机制)
+// -------------------------------------------------------------------------
+const database = [
+    { 
+        title: "Non-Euclidean Orbits & Gravity Sandbox", 
+        desc: "What happens when gravity scales with cubic inverse distance? A real-time WebGL canvas exploring chaotic planetary vector math.", 
+        tag: "Simulations", 
+        url: "sandbox/non-euclidean-gravity.html",
+        img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80",
+        featured: true 
+    },
+    { 
+        title: "Raymarching SDF Fractal Renderer", 
+        desc: "Slicing high-dimensional complex mathematical geometries inside a single fragment shader. Zero meshes, pure mathematical bounds.", 
+        tag: "Shaders", 
+        url: "sandbox/raymarching-sdf.html",
+        img: "" 
+    },
+    { 
+        title: "Perlin Noise Island Ecosystem Architect", 
+        desc: "An interactive macro-generator parsing composite wave frequencies to simulate erosion, biome scaling, and custom seeds.", 
+        tag: "Generative", 
+        url: "sandbox/perlin-island.html",
+        img: "" 
+    },
+    { 
+        title: "Kinetic Velocity Canvas Typography", 
+        desc: "Tracking cursor acceleration states to break SVG letterforms down into fluid, micro-attractor particle assemblies.", 
+        tag: "UI Labs", 
+        url: "sandbox/kinetic-typography.html",
+        img: "" 
+    },
+    { 
+        title: "Cellular Automata Harmonic Synthesizer", 
+        desc: "A modified grid variant of Conway's Game of Life where real-time cell collision boundaries structure custom audio frequencies.", 
+        tag: "Simulations", 
+        url: "sandbox/cellular-synth.html",
+        img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" 
+    },
+    {
+        title: "Spring Dynamic Micro-Interaction Core",
+        desc: "Deconstructing tension and friction matrices into fluid CSS/JS state hooks. A lightweight playground for organic interface UI.",
+        tag: "UI Labs",
+        url: "sandbox/spring-physics.html",
+        img: ""
+    }
+];
+
+// -------------------------------------------------------------------------
+// 控制中心
+// -------------------------------------------------------------------------
+let currentFilter = "ALL";
+let itemsToShow = 2; 
+
+const featuredContainer = document.getElementById("featuredContainer");
+const sandboxListContainer = document.getElementById("sandboxListContainer");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+const filterMatrix = document.getElementById("filterMatrix");
+
+function updateCounts() {
+    document.getElementById("count-ALL").textContent = database.length;
+    ['Simulations', 'Shaders', 'UI Labs', 'Generative'].forEach(tag => {
+        const count = database.filter(item => item.tag === tag).length;
+        const id = "count-" + tag.replace(" ", "");
+        const el = document.getElementById(id);
+        if(el) el.textContent = count;
+    });
+}
+
+function render() {
+    const featuredSandbox = database.find(item => item.featured) || database[0];
+    
+    // 1. 置顶精选位
+    if (currentFilter === "ALL" && featuredSandbox) {
+        featuredContainer.style.display = "block";
+        const hasImg = featuredSandbox.img && featuredSandbox.img.trim() !== "";
+        featuredContainer.innerHTML = `
+            <div class="card featured-showcase-card ${hasImg ? '' : 'no-image'}" onclick="location.href='${featuredSandbox.url}'">
+                <div class="card-content showcase-text">
+                    <div class="label">Active Core / ${featuredSandbox.tag}</div>
+                    <div class="card-title">${featuredSandbox.title}</div>
+                    <div class="card-desc">${featuredSandbox.desc}</div>
+                </div>
+                ${hasImg ? `
+                <div class="showcase-img-wrapper">
+                    <img src="${featuredSandbox.img}" alt="sandbox-preview" class="showcase-img">
+                </div>` : ''}
+            </div>
+        `;
+    } else {
+        featuredContainer.innerHTML = "";
+        featuredContainer.style.display = "none";
+    }
+
+    // 2. 标签过滤
+    let streamData = database;
+    if (currentFilter !== "ALL") {
+        streamData = database.filter(item => item.tag === currentFilter);
+    } else {
+        streamData = database.filter(item => item !== featuredSandbox);
+    }
+
+    // 3. 截取分页
+    const slicedData = streamData.slice(0, itemsToShow);
+    
+    // 4. 普通流渲染
+    if(slicedData.length === 0) {
+        sandboxListContainer.innerHTML = `<div style="padding: 32px; opacity: 0.5; font-size:0.95rem;">No experiments active within this matrix branch.</div>`;
+    } else {
+        sandboxListContainer.innerHTML = slicedData.map(item => {
+            const hasImg = item.img && item.img.trim() !== "";
+            return `
+                <div class="card text-article-card ${hasImg ? 'has-image' : ''}" onclick="location.href='${item.url}'">
+                    ${hasImg ? `
+                    <div class="inline-img-wrapper">
+                        <img src="${item.img}" alt="experiment graphic">
+                    </div>` : ''}
+                    <div class="card-content">
+                        <div class="label">${item.tag}</div>
+                        <div class="card-title">${item.title}</div>
+                        <div class="card-desc">${item.desc}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // 5. 分页按钮控制
+    if (itemsToShow >= streamData.length) {
+        loadMoreBtn.classList.add("hidden");
+    } else {
+        loadMoreBtn.classList.remove("hidden");
+    }
+}
+
+// -------------------------------------------------------------------------
+// 事件监听
+// -------------------------------------------------------------------------
+loadMoreBtn.addEventListener('click', () => {
+    itemsToShow += 3; 
+    render();
+});
+
+filterMatrix.addEventListener('click', (e) => {
+    const item = e.target.closest('.cat-item');
+    if (!item) return;
+
+    document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+    item.classList.add('active');
+
+    currentFilter = item.getAttribute('data-tag');
+    itemsToShow = 2; 
+    
+    sandboxListContainer.style.opacity = 0.3;
+    setTimeout(() => {
+        render();
+        sandboxListContainer.style.opacity = 1;
+    }, 80);
+});
+
+updateCounts();
+render();
+</script>
+</body>
+</html>
