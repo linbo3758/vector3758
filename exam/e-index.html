@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Exam Tactics | Vector 3758</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg:#FCFBF8;
+    --paper:#FFFFFF;
+    --text:#053D82;
+    --accent:#4FCFE7;
+    --border:#EBEBEB;
+    --hover:#F8FAFE;
+
+}
+
+body{
+
+    font-family:"Inter",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:48px;
+    min-height:100vh;
+
+}
+
+.container{
+
+    max-width:1400px;
+    margin:auto;
+
+}
+
+.logo{
+
+    font-size:3.8rem;
+    font-weight:600;
+    letter-spacing:-3px;
+    color:var(--accent);
+    line-height:1.05;
+
+}
+
+.divider{
+
+    width:120px;
+    height:2px;
+    background:rgba(5,61,130,.18);
+    margin:22px 0 52px;
+
+}
+
+.page-title{
+
+    font-size:2.6rem;
+    font-weight:600;
+    letter-spacing:-1px;
+    margin-bottom:12px;
+
+}
+
+.page-desc{
+
+    font-size:1rem;
+    line-height:1.8;
+    opacity:.78;
+    max-width:700px;
+    margin-bottom:48px;
+
+}
+
+/* ---------------- Cards ---------------- */
+
+.grid{
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+
+}
+
+.card{
+
+    background:var(--paper);
+    border:1px solid var(--border);
+
+    position:relative;
+
+    padding:32px;
+
+    cursor:pointer;
+
+    transition:.22s cubic-bezier(.2,0,0,1);
+
+    min-height:320px;
+
+    display:flex;
+    align-items:flex-start;
+
+}
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background-image:
+
+        linear-gradient(rgba(5,61,130,.05) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(5,61,130,.05) 1px,transparent 1px);
+
+    background-size:32px 32px;
+
+    pointer-events:none;
+
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+    background:var(--hover);
+
+    border-color:#d9d9d9;
+
+}
+
+.content{
+
+    position:relative;
+    z-index:2;
+
+}
+
+.label{
+
+    color:var(--accent);
+
+    font-size:.72rem;
+
+    letter-spacing:2px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+.title{
+
+    font-size:2rem;
+
+    font-weight:600;
+
+    margin-bottom:18px;
+
+    letter-spacing:-.5px;
+
+}
+
+.note{
+
+    font-size:.95rem;
+
+    line-height:1.75;
+
+    opacity:.82;
+
+}
+
+.arrow{
+
+    margin-top:36px;
+
+    display:inline-block;
+
+    border-bottom:1.5px solid var(--text);
+
+    padding-bottom:3px;
+
+    font-size:.9rem;
+
+}
+
+.back{
+
+    display:inline-block;
+
+    margin-top:60px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    border-bottom:1.5px solid var(--text);
+
+    padding-bottom:3px;
+
+}
+
+@media(max-width:1000px){
+
+.grid{
+
+grid-template-columns:1fr;
+
+}
+
+.card{
+
+min-height:240px;
+
+}
+
+body{
+
+padding:28px;
+
+}
+
+.logo{
+
+font-size:3rem;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+Vector 3758
+</div>
+
+<div class="divider"></div>
+
+<div class="page-title">
+Exam Tactics
+</div>
+
+<div class="page-desc">
+
+Explore structured revision systems, exam technique,
+mark scheme analysis and competition thinking,
+organised by learning stage.
+
+</div>
+
+<div class="grid">
+
+<div class="card" onclick="location.href='gcse.html'">
+
+<div class="content">
+
+<div class="label">
+FOUNDATIONS
+</div>
+
+<div class="title">
+GCSE
+</div>
+
+<div class="note">
+
+Subject-specific revision,
+exam strategies,
+mark scheme insights,
+common misconceptions
+and effective study methods.
+
+</div>
+
+<div class="arrow">
+Explore →
+</div>
+
+</div>
+
+</div>
+
+<div class="card" onclick="location.href='alevel.html'">
+
+<div class="content">
+
+<div class="label">
+DEEPER STUDY
+</div>
+
+<div class="title">
+A-Level
+</div>
+
+<div class="note">
+
+Advanced revision,
+problem solving,
+exam technique,
+derivations,
+and conceptual understanding
+across mathematics and science.
+
+</div>
+
+<div class="arrow">
+Explore →
+</div>
+
+</div>
+
+</div>
+
+<div class="card" onclick="location.href='competitions.html'">
+
+<div class="content">
+
+<div class="label">
+BEYOND THE SYLLABUS
+</div>
+
+<div class="title">
+Competitions
+</div>
+
+<div class="note">
+
+Preparation for competitions, admission assessments and super-curricular. 
+
+</div>
+
+<div class="arrow">
+Explore →
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<a class="back" href="../index.html">
+
+← Return Home
+
+</a>
+
+</div>
+
+</body>
+
+</html>
