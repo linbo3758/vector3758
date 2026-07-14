@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Under Construction | Vector 3758</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#FCFBF8;
+    --paper:#FFFFFF;
+    --text:#053D82;
+    --accent:#4FCFE7;
+    --border:#EBEBEB;
+    --hover:#F8FAFE;
+}
+
+body{
+
+    font-family:"Inter",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:40px;
+
+}
+
+/* subtle grid */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(5,61,130,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5,61,130,.045) 1px, transparent 1px);
+
+    background-size:32px 32px;
+
+    pointer-events:none;
+
+}
+
+.wrapper{
+
+    width:min(760px,100%);
+
+}
+
+.logo{
+
+    font-size:3.8rem;
+    font-weight:600;
+    letter-spacing:-3px;
+
+    color:var(--accent);
+
+    margin-bottom:14px;
+
+}
+
+.divider{
+
+    width:120px;
+    height:2px;
+
+    background:rgba(5,61,130,.18);
+
+    margin-bottom:42px;
+
+}
+
+.card{
+
+    position:relative;
+
+    background:var(--paper);
+
+    border:1px solid var(--border);
+
+    padding:52px;
+
+    transition:.25s;
+
+}
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(5,61,130,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5,61,130,.05) 1px, transparent 1px);
+
+    background-size:32px 32px;
+
+    pointer-events:none;
+
+}
+
+.card:hover{
+
+    transform:translateY(-3px);
+
+    background:var(--hover);
+
+}
+
+.content{
+
+    position:relative;
+    z-index:2;
+
+}
+
+.label{
+
+    color:var(--accent);
+
+    letter-spacing:2px;
+
+    font-size:.72rem;
+
+    font-weight:600;
+
+    margin-bottom:18px;
+
+}
+
+h1{
+
+    font-size:2.4rem;
+
+    font-weight:600;
+
+    letter-spacing:-1px;
+
+    margin-bottom:28px;
+
+}
+
+p{
+
+    font-size:1rem;
+
+    line-height:1.8;
+
+    max-width:560px;
+
+    opacity:.82;
+
+}
+
+.progress{
+
+    margin-top:42px;
+
+}
+
+.progress-title{
+
+    font-size:.82rem;
+
+    letter-spacing:2px;
+
+    color:var(--accent);
+
+    margin-bottom:14px;
+
+}
+
+.bar{
+
+    width:100%;
+    height:8px;
+
+    background:#E9EDF3;
+
+    overflow:hidden;
+
+}
+
+.fill{
+
+    width:72%;
+
+    height:100%;
+
+    background:var(--accent);
+
+}
+
+.status{
+
+    margin-top:28px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+
+    font-size:.95rem;
+
+}
+
+.done{
+
+    opacity:.9;
+
+}
+
+.todo{
+
+    opacity:.55;
+
+}
+
+.footer{
+
+    margin-top:48px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    border-bottom:1.5px solid var(--text);
+
+    padding-bottom:3px;
+
+    transition:.2s;
+
+}
+
+.footer:hover{
+
+    opacity:.65;
+
+}
+
+.math{
+
+    position:fixed;
+
+    right:70px;
+    bottom:50px;
+
+    font-size:8rem;
+
+    color:#053D82;
+
+    opacity:.035;
+
+    font-weight:500;
+
+    user-select:none;
+
+}
+
+@media(max-width:700px){
+
+.card{
+
+padding:36px;
+
+}
+
+.logo{
+
+font-size:3rem;
+
+}
+
+h1{
+
+font-size:2rem;
+
+}
+
+.status{
+
+grid-template-columns:1fr;
+
+}
+
+.math{
+
+display:none;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="math">
+
+∫
+
+</div>
+
+<div class="wrapper">
+
+<div class="logo">
+Vector 3758
+</div>
+
+<div class="divider"></div>
+
+<div class="card">
+
+<div class="content">
+
+<div class="label">
+IN DEVELOPMENT
+</div>
+
+<h1>
+Under Construction
+</h1>
+
+<p>
+
+Some sections are currently being built.
+
+<br><br>
+
+We are still writing articles, designing visualisations,
+and testing interactive simulations.
+
+Some pages may be incomplete or temporarily unavailable
+while improvements are being made.
+
+</p>
+
+<div class="progress">
+
+<div class="progress-title">
+CURRENT PROGRESS
+</div>
+
+<div class="bar">
+
+<div class="fill"></div>
+
+</div>
+
+</div>
+
+<div class="status">
+
+<div class="done">
+✓ Homepage
+</div>
+
+<div class="done">
+✓ Articles
+</div>
+
+<div class="done">
+✓ Sandbox
+</div>
+
+<div class="todo">
+○ Deconstruct Equations
+</div>
+
+<div class="todo">
+○ Exam Tactics
+</div>
+
+<div class="todo">
+○ Advanced Simulations
+</div>
+
+</div>
+
+<a class="footer" href="index.html">
+
+← Return Home
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
