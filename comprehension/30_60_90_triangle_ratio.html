@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vector 3758 — The 30-60-90 Ratio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   1. Design Variables & Base Reset (Vector 3758 Theme)
+   ========================================================================== */
+:root {
+    --bg: #FCFBF8;            /* Warm paper color */
+    --paper: #FFFFFF;         /* Pure white card */
+    --text: #053D82;          /* Deep scientific blue */
+    --accent: #4FCFE7;        /* Vibrant cyan highlighting */
+    --border-light: #ebebeb;  /* Clean light gray border */
+    --border-hover: #d4d4d4;  /* Card hover state border */
+    --hover-bg: #F8FAFE;      /* Card hover subtle blue tint */
+    --dot-inactive: #B8CDE0;  /* Inactive slider indicator */
+    --dot-active: #4FCFE7;    /* Active indicator */
+    --transition-smooth: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 48px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 1100px) { body { padding: 36px 32px; } }
+@media (max-width: 860px) { body { padding: 28px 20px; } }
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   2. Hero Section
+   ========================================================================== */
+.hero {
+    margin-bottom: 48px;
+}
+.logo {
+    font-size: 3.5rem;
+    font-weight: 600;
+    letter-spacing: -3px;
+    color: var(--accent);
+    line-height: 1.05;
+}
+.back-home{
+    color:#9B9B9B;
+}
+
+.back-home:hover{
+    color:#666666;
+}
+.divider {
+    width: 120px;
+    height: 2px;
+    background: rgba(5, 61, 130, 0.18);
+    margin-top: 18px;
+}
+
+/* ==========================================================================
+   3. Split Grid Layout
+   ========================================================================== */
+.main-layout {
+    display: flex;
+    gap: 32px;
+    align-items: stretch;
+}
+
+/* Left side: Explanatory text (2/5 ratio) */
+.article-zone {
+    flex: 2;
+    min-width: 0;
+}
+
+/* Right side: Blueprint interactive graphics (3/5 ratio) */
+.right-zone {
+    flex: 3;
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+        gap: 28px;
+    }
+    .article-zone, .right-zone {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   4. Card Styling & Grid Coordinates Concept (Entirely Clickable)
+   ========================================================================== */
+.card {
+    background: var(--paper);
+    border: 1px solid var(--border-light);
+    padding: 36px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-smooth);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    background: var(--hover-bg);
+    border-color: var(--border-hover);
+}
+
+/* Engineering blue-print grid background */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(5, 61, 130, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.card > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Typography elements */
+.label {
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+}
+
+/* Discrete steps text presentation */
+.step-text-container {
+    min-height: 240px;
+}
+
+.step-content {
+    display: none;
+}
+
+.step-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.85;
+    margin-bottom: 16px;
+}
+
+/* Formulas wrapper */
+.math-block {
+    background: rgba(5, 61, 130, 0.03);
+    border-left: 3px solid var(--accent);
+    padding: 16px;
+    margin: 16px 0;
+    font-size: 1.05rem;
+}
+
+/* Hint for user */
+.click-hint {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   5. Controller Navigation (Mininalist Dots)
+   ========================================================================== */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+.nav-dots {
+    display: flex;
+    gap: 12px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--dot-inactive);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.dot.active {
+    background-color: var(--dot-active);
+    transform: scale(1.25);
+    box-shadow: 0 0 0 3px rgba(79, 207, 231, 0.25);
+}
+
+/* ==========================================================================
+   6. Visual Canvas (Interactive Clean Geometry SVG)
+   ========================================================================== */
+.canvas-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 480px;
+}
+
+#geometry-svg {
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+}
+
+/* SVG Style modifiers depending on current state */
+.tri-side {
+    stroke: var(--text);
+    stroke-width: 3;
+    fill: none;
+    transition: var(--transition-smooth);
+}
+
+.bisector {
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-dasharray: 6 4;
+    transition: var(--transition-smooth);
+}
+
+.dim-label {
+    fill: var(--text);
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-anchor: middle;
+    transition: var(--transition-smooth);
+}
+
+.angle-label {
+    fill: var(--accent);
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-anchor: middle;
+    transition: var(--transition-smooth);
+}
+
+.right-angle {
+    stroke: var(--accent);
+    stroke-width: 2;
+    fill: none;
+    transition: var(--transition-smooth);
+}
+
+/* Step-specific opacity/visibility modifiers */
+.left-half {
+    transition: var(--transition-smooth);
+}
+.whole-triangle{
+    transition:var(--transition-smooth);
+}
+
+/* State changes driven by javascript active class updates */
+/* ---------- STEP 1 ---------- */
+
+.state-1 .whole-triangle{
+    opacity:1;
+}
+
+.state-1 #svgLeftHalf,
+.state-1 #svgRightHalf{
+    opacity:0;
+}
+
+.state-1 .bisector{
+    opacity:0;
+}
+
+.state-1 .right-angle{
+    opacity:0;
+}
+
+.state-1 .split-label{
+    opacity:0;
+}
+
+.state-1 .whole-label{
+    opacity:1;
+}
+
+/* ---------- STEP 2 ---------- */
+
+.state-2 .whole-triangle{
+    opacity:0;
+}
+
+.state-2 #svgLeftHalf,
+.state-2 #svgRightHalf{
+    opacity:1;
+}
+
+.state-2 .bisector{
+    opacity:1;
+}
+
+.state-2 .right-angle{
+    opacity:1;
+}
+
+.state-2 .split-label{
+    opacity:1;
+}
+
+.state-2 .whole-label{
+    opacity:0;
+}
+
+/* ---------- STEP 3 ---------- */
+
+.state-3 .whole-triangle{
+    opacity:0;
+}
+
+.state-3 #svgLeftHalf{
+    opacity:.12;
+}
+
+.state-3 #svgRightHalf{
+    opacity:1;
+}
+
+.state-3 .bisector{
+    opacity:1;
+    stroke-dasharray:0;
+}
+
+.state-3 .right-angle{
+    opacity:1;
+}
+
+.state-3 .split-label{
+    opacity:1;
+}
+
+.state-3 .whole-label{
+    opacity:0;
+}
+
+.highlight {
+    color: var(--accent);
+    font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+
+        <a class="back-home" href="../index.html">
+            ← Back Home
+        </a>
+
+        <div class="logo">30-60-90 Triangle Ratio</div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="main-layout">
+        
+        <div class="article-zone">
+            <div class="card" id="explanationCard">
+                <div>
+                    <div class="label" id="stepLabel">Step 1 of 3</div>
+                    <div class="title" id="stepTitle">The Equilateral Source</div>
+                </div>
+
+                <div class="step-text-container">
+                    <div class="step-content active" id="text-step-1">
+                        <div class="step-desc">
+                            We start with a perfect <strong>Equilateral Triangle</strong>. By definition:
+                        </div>
+                        <div class="step-desc">
+                            • All three side lengths are equal to \(2\).<br>
+                            • All three interior angles are exactly \(60^\circ\).
+                        </div>
+                    </div>
+
+                    <div class="step-content" id="text-step-2">
+                        <div class="step-desc">
+                            Next, we split this equilateral triangle in half by drawing a straight perpendicular altitude line down the middle.
+                        </div>
+                        <div class="step-desc">
+                            This bisection creates key geometric transformations:
+                        </div>
+                        <div class="step-desc">
+                            • The base is cut perfectly in half, from \(2\) units into \(1\) unit.<br>
+                            • The top angle is bisected, from \(60^\circ\) into \(30^\circ\).<br>
+                            • The line forms a perpendicular \(90^\circ\) right angle at the base.
+                        </div>
+                    </div>
+
+                    <div class="step-content" id="text-step-3">
+                        <div class="step-desc">
+                            Now, look only at the remaining right-angled half. We know the base is \(1\) and the hypotenuse is \(2\). Let's solve for the height (\(h\)) using the <strong>Pythagorean Theorem</strong>:
+                        </div>
+                        <div class="math-block">
+                            \[a^2 + b^2 = c^2\]
+                            \[1^2 + h^2 = 2^2\]
+                            \[1 + h^2 = 4 \implies h^2 = 3\]
+                            \[h = \sqrt{3}\]
+                        </div>
+                        <div class="step-desc">
+                            Therefore, the three sides of this \(30^\circ-60^\circ-90^\circ\) triangle match the absolute ratio: <strong class="highlight">\[1 : \sqrt{3} : 2\]</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <div class="nav-dots" id="dotsContainer"></div>
+                  
+                </div>
+            </div>
+        </div>
+
+        <div class="right-zone">
+            <div class="card canvas-card" id="canvasCard">
+                <svg id="geometry-svg" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Step 1: Whole triangle -->
+    <polygon
+        points="150,40 50,213.2 250,213.2"
+        class="tri-side whole-triangle"/>
+
+    <!-- Left half -->
+    <g class="left-half" id="svgLeftHalf">
+        <polygon points="150,40 50,213.2 150,213.2" class="tri-side"/>
+
+        <text x="100" y="235" class="dim-label split-label">1</text>
+        <text x="85" y="125" class="dim-label">2</text>
+
+        <text x="80" y="200" class="angle-label">60°</text>
+        <text x="135" y="75" class="angle-label split-label">30°</text>
+    </g>
+
+    <!-- Right half -->
+    <g id="svgRightHalf">
+        <polygon points="150,40 250,213.2 150,213.2" class="tri-side"/>
+
+        <text x="200" y="235" class="dim-label split-label">1</text>
+        <text x="215" y="125" class="dim-label">2</text>
+
+        <text x="220" y="200" class="angle-label">60°</text>
+        <text x="165" y="75" class="angle-label split-label">30°</text>
+    </g>
+
+    <!-- Altitude -->
+    <line
+        x1="150"
+        y1="40"
+        x2="150"
+        y2="213.2"
+        class="bisector"/>
+
+    <text
+        x="130"
+        y="130"
+        class="dim-label split-label"
+        id="heightLabel">h</text>
+
+    <text
+        x="150"
+        y="235"
+        class="dim-label whole-label">2</text>
+
+    <path
+        d="150,203.2 L160,203.2 L160,213.2"
+        class="right-angle"/>
+
+</svg>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------------------
+    // State Control & UI Logic
+    // --------------------------------------------------------------------------
+    const totalSteps = 3;
+    let currentStep = 1;
+
+    const titles = [
+        "The Equilateral Source",
+        "The Direct Bisection",
+        "The Pythagorean Result"
+    ];
+
+    const stepLabel = document.getElementById("stepLabel");
+    const stepTitle = document.getElementById("stepTitle");
+    const dotsContainer = document.getElementById("dotsContainer");
+    const explanationCard = document.getElementById("explanationCard");
+    const canvasCard = document.getElementById("canvasCard");
+    const heightLabel = document.getElementById("heightLabel");
+
+    // Build Minimal Dots Navigation
+    function buildDots() {
+        dotsContainer.innerHTML = '';
+        for (let i = 1; i <= totalSteps; i++) {
+            const dot = document.createElement("div");
+            dot.classList.add("dot");
+            if (i === currentStep) dot.classList.add("active");
+            dot.addEventListener("click", (e) => {
+                e.stopPropagation(); // Stop card click when clicking directly on dot
+                goToStep(i);
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    // Dynamic Step Engine
+    function goToStep(step) {
+        currentStep = step;
+
+        // 1. Update Title and Headers
+        stepLabel.textContent = `Step ${currentStep} of ${totalSteps}`;
+        stepTitle.textContent = titles[currentStep - 1];
+
+        // 2. Toggle Left Columns Step Explanation Blocks
+        document.querySelectorAll(".step-content").forEach((content, index) => {
+            if (index === currentStep - 1) {
+                content.classList.add("active");
+            } else {
+                content.classList.remove("active");
+            }
+        });
+
+        // 3. Update Visual Class on Canvas Parent Card (Triggers CSS States)
+        canvasCard.className = "card canvas-card state-" + currentStep;
+
+        // 4. Update Height Text in Step 3
+        if (currentStep === 3) {
+            heightLabel.textContent = "√3";
+            heightLabel.style.fill = "var(--accent)";
+        } else {
+            heightLabel.textContent = "h";
+            heightLabel.style.fill = "var(--text)";
+        }
+
+        // 5. Update Dots Active State
+        document.querySelectorAll(".dot").forEach((dot, index) => {
+            if (index === currentStep - 1) {
+                dot.classList.add("active");
+            } else {
+                dot.classList.remove("active");
+            }
+        });
+
+        // 6. Force MathJax to re-render formulas in newly visible cards
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise();
+        }
+    }
+
+    // Advance Step Function (Looping back to 1 at the end)
+    function nextStep() {
+        if (currentStep < totalSteps) {
+            goToStep(currentStep + 1);
+        } else {
+            goToStep(1); // Auto loop back
+        }
+    }
+
+    // Bind click events to both cards for clean card-based progression
+    explanationCard.addEventListener("click", nextStep);
+    canvasCard.addEventListener("click", nextStep);
+
+    // Initialize State 1
+    buildDots();
+    goToStep(1);
+</script>
+</body>
+</html>
