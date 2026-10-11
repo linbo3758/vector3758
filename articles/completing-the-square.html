@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Completing the Square — Vector 3758</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600&display=swap" rel="stylesheet">
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #FCFBF8;
+    --paper: #FFFFFF;
+    --text: #053D82;
+    --accent: #4FCFE7;
+    --border-card: #ebebeb;
+    --hover-bg: #F8FAFE;
+}
+
+body {
+    font-family: "Times New Roman", Times, serif;
+    background-color: var(--bg);
+    background-image:  
+        linear-gradient(rgba(5, 61, 130, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+    color: var(--text);
+    line-height: 1.65;
+    padding: 48px 24px;
+}
+
+.container {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+/* ---------- 导航头部 ---------- */
+.nav-header {
+    margin-bottom: 40px;
+}
+.back-link {
+    font-family: "Inter", sans-serif;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    display: inline-block;
+    border-bottom: 1.5px solid transparent;
+    padding-bottom: 2px;
+}
+.back-link:hover {
+    border-color: var(--text);
+    opacity: 0.7;
+}
+
+/* ---------- 文章头部区 ---------- */
+.article-header {
+    margin-bottom: 32px;
+}
+.meta-container {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.meta-tag {
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid rgba(79, 207, 231, 0.4);
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+.meta-item {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-weight: 400;
+}
+.article-title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+.article-subtitle {
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--accent);
+    margin-bottom: 28px;
+}
+.header-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(5, 61, 130, 0.12);
+    margin-top: 24px;
+}
+
+/* ---------- 文章正文排版 ---------- */
+.article-content p {
+    font-size: 1.18rem;
+    margin-bottom: 24px;
+    text-align: justify;
+}
+.article-content strong {
+    font-weight: 600;
+}
+
+/* ---------- 互动装置内嵌卡片 ---------- */
+.interactive-card {
+    background: var(--paper);
+    border: 1px solid var(--border-card);
+    padding: 32px 28px;
+    margin: 44px 0;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(5, 61, 130, 0.02);
+}
+.interactive-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:  
+        linear-gradient(rgba(5, 61, 130, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.02) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+}
+.widget-title {
+    font-family: "Inter", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 2;
+}
+.widget-desc {
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------- 动画布局 ---------- */
+.animation-layout {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.8fr);
+    gap: 24px;
+    min-height: 480px;
+}
+
+.canvas-wrap {
+    position: relative;
+    min-height: 480px;
+    border: 1px solid var(--border-card);
+    background: rgba(255,255,255,0.5);
+}
+
+#squareCanvas {
+    width: 100%;
+    height: 480px;
+    display: block;
+}
+
+/* ---------- 右侧说明区 ---------- */
+.explanation {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 20px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--border-card);
+}
+
+.step-label {
+    font-family: "Inter", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    min-height: 18px;
+}
+
+.step-title {
+    margin-top: 8px;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    font-weight: 600;
+}
+
+.step-description {
+    margin-top: 12px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: rgba(5, 61, 130, 0.7);
+}
+
+.math-box {
+    margin-top: 18px;
+    padding: 14px;
+    border: 1px solid var(--border-card);
+    background:
+        linear-gradient(rgba(5, 61, 130, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 61, 130, 0.02) 1px, transparent 1px),
+        rgba(255,255,255,0.9);
+    background-size: 16px 16px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.geometry-note {
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.geometry-note-title {
+    font-family: "Inter", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 7px;
+}
+
+.geometry-note p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(5, 61, 130, 0.7);
+}
+
+/* ---------- 控制栏 ---------- */
+.controls {
+    position: relative;
+    z-index: 2;
+    margin-top: 20px;
+    padding: 16px 0 0 0;
+    border-top: 1px solid var(--border-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.progress-area {
+    flex: 1;
+    min-width: 0;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.progress-name {
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.progress-number {
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    opacity: 0.58;
+}
+
+.progress-track {
+    width: 100%;
+    height: 3px;
+    background: #E7EEF3;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.35s ease;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 9px;
+}
+
+button {
+    appearance: none;
+    border: 1px solid rgba(5,61,130,0.2);
+    background: var(--paper);
+    color: var(--text);
+    padding: 8px 14px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease,
+        border-color 0.18s ease;
+}
+
+button:hover {
+    background: var(--hover-bg);
+    border-color: rgba(5,61,130,0.35);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.primary-button {
+    background: var(--text);
+    color: white;
+    border-color: var(--text);
+}
+
+.primary-button:hover {
+    background: #0a4a96;
+    border-color: #0a4a96;
+}
+
+/* ---------- 移动端适配 ---------- */
+@media (max-width: 768px) {
+    body {
+        padding: 32px 16px;
+    }
+    .article-title {
+        font-size: 2.2rem;
+    }
+    .article-subtitle {
+        font-size: 1.15rem;
+    }
+    .interactive-card {
+        padding: 20px 16px;
+    }
+    .animation-layout {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    .canvas-wrap {
+        min-height: 380px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-card);
+    }
+    #squareCanvas {
+        height: 380px;
+    }
+    .explanation {
+        min-height: 300px;
+    }
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .control-buttons {
+        width: 100%;
+    }
+    button {
+        flex: 1;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-header">
+        <a href="../index.html" class="back-link">← Vector 3758</a>
+    </div>
+
+    <div class="article-header">
+        <div class="meta-container">
+            <span class="meta-tag">Algebra</span>
+            <span class="meta-tag">GCSE</span>
+            <span class="meta-item">🕒 5 Min Read</span>
+            <span class="meta-item">📅 11/10/2026</span>
+        </div>
+        <h1 class="article-title">Completing the “Square”:Rectangle or Power of 2?<</h1>
+        <h2 class="article-subtitle">Visualisation of Completing the Square's geometric meaning and further applications.</h2>
+        <div class="header-divider"></div>
+    </div>
+
+    <div class="article-content">
+        <p>Completing the square is one of the most familiar techniques in GCSE maths, an extremely helpful tool in finding a quadratic’s vertex, or solving an equation.</p>
+
+        <p>What exactly is the “square” being completed?</p>
+
+        <p>Is it referring to a square number, such as \(x^2\), because quadratics involve powers of 2?</p>
+
+        <p>Or is it referring to a geometric square — a shape with four equal sides?</p>
+
+        <p>Such a pun! The algebraic form \(a(x+\frac{b}{2a})^2 - \frac{b^2}{4a} + c\) hides a beautiful geometric story. Let’s uncover it step by step.</p>
+
+        <!-- ====== 互动卡片：几何演示 ====== -->
+        <div class="interactive-card">
+            <div class="widget-title">Geometry of Completing the Square</div>
+            <div class="widget-desc">Walk through each step to see how \(x^2 + 6x\) becomes a perfect square.</div>
+
+            <div class="animation-layout">
+                <div class="canvas-wrap">
+                    <canvas id="squareCanvas"></canvas>
+                </div>
+
+                <aside class="explanation">
+                    <div class="step-label" id="stepLabel">STEP 01</div>
+                    <div class="step-title" id="stepTitle">Start with \(x^2\)</div>
+                    <div class="step-description" id="stepDescription">
+                        Think of \(x^2\) as the area of a square whose side length is \(x\).
+                    </div>
+                    <div class="math-box" id="mathBox">\(x^2\)</div>
+                    <div class="geometry-note">
+                        <div class="geometry-note-title">The key idea</div>
+                        <p id="geometryNote">
+                            The word “square” is not only an algebraic operation. It also describes a geometric shape.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="controls">
+                <div class="progress-area">
+                    <div class="progress-top">
+                        <span class="progress-name" id="progressName">Build the shape</span>
+                        <span class="progress-number" id="progressNumber">1 / 6</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div class="control-buttons">
+                    <button id="backButton">← Back</button>
+                    <button class="primary-button" id="nextButton">Next →</button>
+                    <button id="restartButton">Restart</button>
+                </div>
+            </div>
+        </div>
+
+        <p>Consider the equation \(x^2+6x=55\). Not extremely hard to factorise or complete the square.</p>
+
+        <p>Take into account, a square with side length \(x\)’s area equals to \(x^2\). \(6x\) can be interpreted as a rectangle with side \(6\) and \(x\).</p>
+
+        <p>How can we arrange these shapes to turn it into a square, to complete it?</p>
+
+        <p>Here is a demonstration which walks you through each step. The “−9” can be interpreted as getting rid of the extra constant that is not included in the quadratic originally. Now can be understood as “+9” to the other side of the equation to fill the missing corner thus complete the square.</p>
+
+        <h3 style="font-size: 1.5rem; font-weight: 600; margin: 36px 0 16px 0; color: var(--text);">Algebra</h3>
+
+        <p>Geometric understanding and algebraic interpretation are never far apart.</p>
+
+        <p>A quadratic equation completed its square: \(y=a(x-h)^2+k\). Now the vertex is \((h,k)\).</p>
+
+        <p>Either the parabola is positive or negative, the vertex is the minimum or maximum. The vertex is all worked out when \((x-h)^2=0\), (as the squared term has a known lower bound: \(0\)), therefore \(x=-h\), \(y=k\). Here, completing the square (degree of 2) makes life easier by taking \(x\) as which value to maximise/minimise the whole equation.</p>
+
+        <p>Use the exact same example with above, \(x^2+6x=55\). The roots can be worked out by \((x+3)^2 = \sqrt{64}\). Two real roots here, \(5\) and \(-11\). Same as the answer we got from factorising it \((x-5)(x+11)\).</p>
+
+        <p>The quadratic formula can be deduced by completing the square:</p>
+
+        \[\begin{aligned}         & ax^2+bx+c=0, \qquad a\ne 0 \\         & x^2+\frac{b}{a}x+\frac{c}{a}=0 \\         & x^2+\frac{b}{a}x=-\frac{c}{a} \\         & x^2+\frac{b}{a}x+\left(\frac{b}{2a}\right)^2          = -\frac{c}{a}+\left(\frac{b}{2a}\right)^2 \\         & \left(x+\frac{b}{2a}\right)^2          = \frac{b^2-4ac}{4a^2} \\         & x+\frac{b}{2a}          = \pm\frac{\sqrt{b^2-4ac}}{2a} \\         & \boxed{x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}}         \end{aligned}\]
+
+        <h3 style="font-size: 1.5rem; font-weight: 600; margin: 36px 0 16px 0; color: var(--text);">Calculus</h3>
+
+        <p>Vertex, the terminology of maximum/minimum point in a quadratic graph — maximum, minimum point, which is the stationary point in terms of calculus. A point with \(dy/dx=0\) (rate of change = 0, gradient = 0).</p>
+
+        <p>\(ax^2+bx+c\)</p>
+        <p>\(dy/dx = 2ax + b = 0\)</p>
+        <p>\(x = -b/2a\)</p>
+
+        <p>Integration can be understood as the reverse process of differentiation. If differentiating a function gives us its rate of change, integration allows us to work backwards and recover the original function.</p>
+
+        <p>For example,</p>
+        \[\frac{d}{dx}(x^3)=3x^2\]
+        <p>Therefore,</p>
+        \[\int 3x^2\,dx = x^3 + C\]
+
+        <p>The constant \(C\) is necessary because the derivative of any constant is zero. Indefinite integration therefore gives a family of functions rather than a single function.</p>
+
+        <p>For quadratic expressions, completing the square can reveal a useful structure before integration. Consider</p>
+        \[\int (x^2+6x+13)\,dx\]
+
+        <p>Completing the square gives</p>
+        \[x^2+6x+13=(x+3)^2+4\]
+
+        <p>The integral becomes</p>
+        \[\int \bigl((x+3)^2+4\bigr)\,dx\]
+
+        <p>Using the power rule for integration,</p>
+        \[= \frac{(x+3)^3}{3} + 4x + C\]
+
+        <p>Here, completing the square makes the expression easier to recognise and integrate, although expanding the original polynomial and integrating each term would also work.</p>
+
+        <p>Its usefulness becomes clearer in more complicated expressions, such as</p>
+        \[\int \frac{1}{x^2+6x+13}\,dx\]
+
+        <p>Completing the square transforms the denominator into</p>
+        \[(x+3)^2+4\]
+
+        <p>This matches the standard integral form involving the inverse tangent function, giving</p>
+        \[\frac12\tan^{-1}\left(\frac{x+3}{2}\right)+C\]
+
+        <p>In this case, completing the square does more than simplify the expression: it reveals the mathematical form needed to identify the integral.</p>
+    </div>
+</div>
+
+<script>
+/* =========================================================
+   VECTOR 3758 — COMPLETING THE SQUARE (INTERACTIVE)
+   ========================================================= */
+
+const canvas = document.getElementById("squareCanvas");
+const ctx = canvas.getContext("2d");
+
+const stepLabel = document.getElementById("stepLabel");
+const stepTitle = document.getElementById("stepTitle");
+const stepDescription = document.getElementById("stepDescription");
+const mathBox = document.getElementById("mathBox");
+const geometryNote = document.getElementById("geometryNote");
+
+const progressName = document.getElementById("progressName");
+const progressNumber = document.getElementById("progressNumber");
+const progressFill = document.getElementById("progressFill");
+
+const nextButton = document.getElementById("nextButton");
+const backButton = document.getElementById("backButton");
+const restartButton = document.getElementById("restartButton");
+
+/* =========================================================
+   COLOURS
+   ========================================================= */
+
+const COLOURS = {
+    bg: "#FCFBF8",
+    paper: "#FFFFFF",
+    text: "#053D82",
+    accent: "#4FCFE7",
+
+    muted: "rgba(5,61,130,0.55)",
+
+    soft: "rgba(79, 207, 231, 0.22)",
+    softStroke: "rgba(5, 61, 130, 0.35)",
+
+    lighterAccent: "rgba(79,207,231,0.08)",
+
+    grid: "rgba(5,61,130,0.055)",
+
+    border: "rgba(5,61,130,0.17)"
+};
+
+/* =========================================================
+   CANVAS RESPONSIVE SETUP
+   ========================================================= */
+
+let W = 0;
+let H = 0;
+let dpr = 1;
+
+function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = rect.width;
+    H = rect.height;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+/* =========================================================
+   STEP DATA
+   ========================================================= */
+
+const steps = [
+    {
+        label: "STEP 01",
+        title: "Start with \\(x^2\\)",
+        description:
+            "Think of \\(x^2\\) as the area of a square whose side length is \\(x\\).",
+        math:
+            "\\(x^2\\)",
+        note:
+            "The word “square” is already hiding a geometric idea: \\(x^2\\) can be represented by the area of an \\(x \\times x\\) square.",
+        progress:
+            "Build the shape"
+    },
+    {
+        label: "STEP 02",
+        title: "Split the \\(6x\\)",
+        description:
+            "The term \\(6x\\) can be viewed as two identical rectangles, each with area \\(3x\\).",
+        math:
+            "\\(x^2 + 3x + 3x\\)",
+        note:
+            "Splitting \\(6x\\) into two \\(3x\\) rectangles lets us place them around the original square.",
+        progress:
+            "Arrange the pieces"
+    },
+    {
+        label: "STEP 03",
+        title: "A rectangle appears",
+        description:
+            "Move one \\(3x\\) rectangle to the right of the square and the other below it.",
+        math:
+            "\\(x^2 + 6x\\)",
+        note:
+            "The three pieces now form an almost-complete square. Only one corner is missing.",
+        progress:
+            "Reveal the missing corner"
+    },
+    {
+        label: "STEP 04",
+        title: "Complete the square",
+        description:
+            "The missing corner has side length 3, so its area is \\(3 \\times 3 = 9\\).",
+        math:
+            "\\(x^2 + 6x + 9 = (x + 3)^2\\)",
+        note:
+            "This is the geometric meaning of completing the square: add the missing square so the rectangle becomes a square.",
+        progress:
+            "Complete the square"
+    },
+    {
+        label: "STEP 05",
+        title: "Return to algebra",
+        description:
+            "Because \\(x^2 + 6x = 55\\), adding 9 to both sides gives 64 on the right.",
+        math:
+            "\\(x^2 + 6x + 9 = 55 + 9\\)<br>\\((x + 3)^2 = 64\\)",
+        note:
+            "The geometry has now produced the familiar algebraic identity.",
+        progress:
+            "Translate geometry"
+    },
+    {
+        label: "STEP 06",
+        title: "Solve",
+        description:
+            "The completed square has area 64, so its side length is \\(\\pm 8\\).",
+        math:
+            "\\((x + 3)^2 = 64\\)<br>\\(x + 3 = \\pm 8\\)<br>\\(x = 5\\) or \\(-11\\)",
+        note:
+            "The geometry explains where the square comes from. The final algebra gives the two solutions.",
+        progress:
+            "Solution"
+    }
+];
+
+/* =========================================================
+   ANIMATION STATE
+   ========================================================= */
+
+let currentStep = 0;
+let animationStart = performance.now();
+const animationDuration = 850;
+
+/* =========================================================
+   EASING
+   ========================================================= */
+
+function easeInOut(t) {
+    t = Math.max(0, Math.min(1, t));
+    return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function lerp(a, b, t) {
+    return a + (b - a) * t;
+}
+
+function fillRect(x, y, w, h, fill, stroke = null) {
+    ctx.fillStyle = fill;
+    ctx.fillRect(x, y, w, h);
+    if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(x, y, w, h);
+    }
+}
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+function drawCanvasGrid() {
+    ctx.save();
+    ctx.strokeStyle = COLOURS.grid;
+    ctx.lineWidth = 1;
+    const spacing = 32;
+    for (let x = 0; x <= W; x += spacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, H);
+        ctx.stroke();
+    }
+    for (let y = 0; y <= H; y += spacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+function drawText(
+    text,
+    x,
+    y,
+    size,
+    colour = COLOURS.text,
+    align = "center",
+    weight = "500",
+    family = "Inter, system-ui, sans-serif"
+) {
+    ctx.save();
+    ctx.font = `${weight} ${size}px ${family}`;
+    ctx.fillStyle = colour;
+    ctx.textAlign = align;
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x, y);
+    ctx.restore();
+}
+
+function drawMathText(text, x, y, size, colour = COLOURS.text) {
+    drawText(
+        text,
+        x,
+        y,
+        size,
+        colour,
+        "center",
+        "400",
+        'Georgia, "Times New Roman", serif'
+    );
+}
+
+/* =========================================================
+   DIMENSION LINE
+   ========================================================= */
+
+function drawDimensionLine(x1, y1, x2, y2, label, vertical = false, alpha = 1) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = COLOURS.text;
+    ctx.fillStyle = COLOURS.text;
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    if (vertical) {
+        drawText(
+            label,
+            x1 - 18,
+            (y1 + y2) / 2,
+            15,
+            COLOURS.text,
+            "center",
+            "500",
+            'Georgia, "Times New Roman", serif'
+        );
+    } else {
+        drawText(
+            label,
+            (x1 + x2) / 2,
+            y1 - 16,
+            15,
+            COLOURS.text,
+            "center",
+            "500",
+            'Georgia, "Times New Roman", serif'
+        );
+    }
+    ctx.restore();
+}
+
+/* =========================================================
+   MAIN GEOMETRY
+   ========================================================= */
+
+function getGeometry() {
+    const maxSide = Math.min(W * 0.52, H * 0.58);
+    const xSize = maxSide;
+    const small = xSize * 0.28;
+    const total = xSize + small;
+    const left = (W - total) / 2;
+    const top = (H - total) / 2 + 10;
+    return { x: xSize, s: small, total, left, top };
+}
+
+/* =========================================================
+   DRAW THE ORIGINAL SQUARE
+   ========================================================= */
+
+function drawMainSquare(g, alpha = 1) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    fillRect(g.left, g.top, g.x, g.x, COLOURS.lighterAccent, COLOURS.text);
+    drawMathText("x²", g.left + g.x / 2, g.top + g.x / 2, Math.max(20, g.x * 0.16));
+    drawDimensionLine(g.left, g.top - 30, g.left + g.x, g.top - 30, "x");
+    drawDimensionLine(g.left - 32, g.top, g.left - 32, g.top + g.x, "x", true);
+    ctx.restore();
+}
+
+/* =========================================================
+   DRAW 3x RECTANGLES
+   ========================================================= */
+
+function drawHorizontalRectangle(g, progress, alpha = 1) {
+    const targetX = g.left;
+    const targetY = g.top + g.x;
+    const startY = g.top + g.x + 85;
+    const y = lerp(startY, targetY, progress);
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    fillRect(targetX, y, g.x, g.s, COLOURS.soft, COLOURS.softStroke);
+    drawMathText("3x", targetX + g.x / 2, y + g.s / 2, Math.max(18, g.s * 0.42));
+    ctx.restore();
+}
+
+function drawVerticalRectangle(g, progress, alpha = 1) {
+    const targetX = g.left + g.x;
+    const targetY = g.top;
+    const startX = g.left + g.x + 85;
+    const x = lerp(startX, targetX, progress);
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    fillRect(x, targetY, g.s, g.x, COLOURS.soft, COLOURS.softStroke);
+    drawMathText("3x", x + g.s / 2, targetY + g.x / 2, Math.max(18, g.s * 0.42));
+    ctx.restore();
+}
+
+/* =========================================================
+   MISSING CORNER
+   ========================================================= */
+
+function drawMissingCorner(g, alpha = 1) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.setLineDash([6, 5]);
+    ctx.strokeStyle = COLOURS.accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(g.left + g.x, g.top + g.x, g.s, g.s);
+    ctx.setLineDash([]);
+    drawMathText("?", g.left + g.x + g.s / 2, g.top + g.x + g.s / 2, Math.max(22, g.s * 0.42), COLOURS.accent);
+    ctx.restore();
+}
+
+/* =========================================================
+   COMPLETE CORNER
+   ========================================================= */
+
+function drawCompletedCorner(g, progress) {
+    const x = g.left + g.x;
+    const y = g.top + g.x;
+    const p = Math.max(0, Math.min(1, progress));
+
+    ctx.save();
+    fillRect(x, y, g.s * p, g.s * p, COLOURS.accent, COLOURS.text);
+    if (p > 0.65) {
+        drawMathText("9", x + g.s / 2, y + g.s / 2, Math.max(19, g.s * 0.40), COLOURS.text);
+    }
+    ctx.restore();
+}
+
+/* =========================================================
+   OUTER COMPLETED SQUARE
+   ========================================================= */
+
+function drawOuterSquare(g, alpha = 1) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = COLOURS.text;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(g.left, g.top, g.total, g.total);
+    ctx.restore();
+}
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+function drawArrow(x1, y1, x2, y2, colour = COLOURS.accent) {
+    ctx.save();
+    ctx.strokeStyle = colour;
+    ctx.fillStyle = colour;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+}
+
+/* =========================================================
+   DRAW SCENE
+   ========================================================= */
+
+function draw() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    drawCanvasGrid();
+
+    const g = getGeometry();
+    const elapsed = performance.now() - animationStart;
+    const rawProgress = elapsed / animationDuration;
+    const p = easeInOut(rawProgress);
+
+    if (currentStep === 0) {
+        drawMainSquare(g, 1);
+    } else if (currentStep === 1) {
+        drawMainSquare(g, 1);
+        drawHorizontalRectangle(g, p, 1);
+        drawVerticalRectangle(g, p, 1);
+    } else if (currentStep === 2) {
+        drawMainSquare(g, 1);
+        drawHorizontalRectangle(g, 1, 1);
+        drawVerticalRectangle(g, 1, 1);
+        drawMissingCorner(g, 1);
+    } else if (currentStep === 3) {
+        drawMainSquare(g, 1);
+        drawHorizontalRectangle(g, 1, 1);
+        drawVerticalRectangle(g, 1, 1);
+        drawCompletedCorner(g, p);
+        if (p >= 1) {
+            drawOuterSquare(g, 1);
+            drawDimensionLine(g.left, g.top - 30, g.left + g.total, g.top - 30, "x + 3");
+            drawDimensionLine(g.left - 32, g.top, g.left - 32, g.top + g.total, "x + 3", true);
+        }
+    } else if (currentStep >= 4) {
+        drawMainSquare(g, 1);
+        drawHorizontalRectangle(g, 1, 1);
+        drawVerticalRectangle(g, 1, 1);
+        drawCompletedCorner(g, 1);
+        drawOuterSquare(g, 1);
+        drawDimensionLine(g.left, g.top - 30, g.left + g.total, g.top - 30, "x + 3");
+        drawDimensionLine(g.left - 32, g.top, g.left - 32, g.top + g.total, "x + 3", true);
+    }
+
+    if (rawProgress < 1) {
+        requestAnimationFrame(draw);
+    }
+}
+
+/* =========================================================
+   UI UPDATER
+   ========================================================= */
+
+function updateUI() {
+    const step = steps[currentStep];
+
+    stepLabel.textContent = step.label;
+    stepTitle.textContent = step.title;
+    stepDescription.textContent = step.description;
+    mathBox.innerHTML = step.math;
+    geometryNote.textContent = step.note;
+
+    progressName.textContent = step.progress;
+    progressNumber.textContent = `${currentStep + 1} / ${steps.length}`;
+    progressFill.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+
+    backButton.disabled = currentStep === 0;
+    nextButton.disabled = currentStep === steps.length - 1;
+
+    animationStart = performance.now();
+    requestAnimationFrame(draw);
+
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([stepTitle, stepDescription, mathBox, geometryNote]).catch((err) => console.log(err));
+    }
+}
+
+/* =========================================================
+   EVENT LISTENERS
+   ========================================================= */
+
+nextButton.addEventListener("click", () => {
+    if (currentStep < steps.length - 1) {
+        currentStep++;
+        updateUI();
+    }
+});
+
+backButton.addEventListener("click", () => {
+    if (currentStep > 0) {
+        currentStep--;
+        updateUI();
+    }
+});
+
+restartButton.addEventListener("click", () => {
+    currentStep = 0;
+    updateUI();
+});
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+window.addEventListener("load", () => {
+    resizeCanvas();
+    updateUI();
+});
+</script>
+</body>
+</html>
